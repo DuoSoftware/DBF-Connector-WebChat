@@ -37,7 +37,7 @@ const IncomingMessageTest = async function (req, res) {
     console.log(req.body);
 
     //     body:Object {SmsMessageSid: "SMa3d0cf78426ca6b1c9044fa05857c7a9", NumMedia: "0", SmsSid: "SMa3d0cf78426ca6b1c9044fa05857c7a9", …}
-    // AccountSid:"AC4528fa754b61f9646e6a64f6a02027c4"
+    // AccountSid:""
     // ApiVersion:"2010-04-01"
     // Body:"Hi"
     // From:"whatsapp:+94771563283"
@@ -53,7 +53,7 @@ const IncomingMessageTest = async function (req, res) {
 
 
     // {
-    //     "AccountSid":"AC4528fa754b61f9646e6a64f6a02027c4",
+    //     "AccountSid":"",
     //     "ApiVersion":"2010-04-01",
     //     "Body":"Can I book a taxi?",
     //     "From":"whatsapp:+94771563283",
@@ -216,8 +216,8 @@ function sendMessage(fromNumber, toNumber, message, accountSid, authToken) {
 
     // let data = getDataFromRedis(fromNumber);
 
-    // const accountSid = 'AC4528fa754b61f9646e6a64f6a02027c4';
-    // const authToken = 'fc7e9b716e54e2fd8100f497dbc821b9';
+    // const accountSid = '';
+    // const authToken = '';
     // const accountSid = data.accountSid;
     // const authToken = data.authToken;
     const client = require('twilio')(accountSid, authToken);
@@ -309,8 +309,8 @@ function getBotDataFromDB(whatsAppNumber) {
 
 const messageSend = function (req, res) {
 
-    const accountSid = 'AC4528fa754b61f9646e6a64f6a02027c4';
-    const authToken = 'fc7e9b716e54e2fd8100f497dbc821b9';
+    const accountSid = '';
+    const authToken = '';
     const client = require('twilio')(accountSid, authToken);
 
     client.messages
