@@ -17,6 +17,13 @@ var restify = require('restify');
 var xml = require('xml');
 let redis = new redisManager();
 
+const Test = async function (req, res) {
+
+    console.log("\n=====================================================================");
+    console.log("======== Entered Test method of WebChat connector ========");
+    res.end("Test")
+}
+
 const IncomingMessage = async function (req, res) {
 
     console.log("\n=====================================================================");
@@ -419,5 +426,6 @@ let GetChannelDetails = (accountSid, type, fromID) => {
 }
 
 module.exports = {
-    IncomingMessage
+    IncomingMessage,
+    Test
 }

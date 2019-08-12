@@ -64,5 +64,6 @@ server.get('/', (req, res) => {
     }))
 });
 
+server.get('/DBF/WebChatConnectorAPI/test', MessageHandler.Test);
 // server.post('/DBF/WhatsAppConnectorAPI/Twilio/sendMessage', MessageHandler.SendMessage);
 server.post('/DBF/WebChatConnectorAPI/incomingMessage', MessageHandler.IncomingMessage);
