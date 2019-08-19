@@ -32,6 +32,10 @@ const IncomingMessage = async function (req, res) {
     console.log(req);
     console.log("================================");
     console.log(req.body);
+
+    let senderID = req.body.messaging.sender.id;
+
+    res.end('{"messaging_type":"RESPONSE","recipient":{"id":"' + senderID + '"},"message":{"text":"Message received"}}')
 }
 
 const IncomingMessageTest = async function (req, res) {
