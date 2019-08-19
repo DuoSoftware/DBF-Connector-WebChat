@@ -12,10 +12,10 @@ var dispatcher = require('../Utility/Dispatcher');
 var BotService = require('../Utility/BotService');
 var BotUserManager = require('../Utility/BotUserManager');
 // var ChannelService = require('../Utility/ChannelService');
-var redisManager = require('../Utility/RedisManager');
+// var redisManager = require('../Utility/RedisManager');
 var restify = require('restify');
 var xml = require('xml');
-let redis = new redisManager();
+// let redis = new redisManager();
 
 const Test = async function (req, res) {
 
@@ -33,9 +33,10 @@ const IncomingMessage = async function (req, res) {
     console.log("================================");
     console.log(req.body);
 
-    let senderID = req.body.messaging[0].sender.id;
+    let audienceID = req.body.messaging[0].sender.id;
+    let webchatID = req.body.messaging[0].recipient.id;
 
-    let response = '{"messaging_type":"RESPONSE","recipient":{"id":"' + senderID + '"},"message":{"text":"Message received"}}';
+    let response = '{"messaging_type":"RESPONSE","audienceID":"' + audienceID + '","webchatID":"' + webchatID + '","message":{"text":"Message received"}}';
     res.end(response);
 }
 
