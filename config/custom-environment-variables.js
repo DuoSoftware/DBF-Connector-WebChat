@@ -43,6 +43,8 @@ module.exports = {
         "dispatcherAPIkey" : "DISPATCHER_APIKEY",
         "dispatchServiceProtocol": "DISPATCHER_PROTOCOL",
         "dispatchServiceHost": "DISPATCHER_HOST",
+        "dispatchServicePort": "DISPATCHER_PORT",
+        "dispatchServiceVersion": "DISPATCHER_VERSION",
         "botServiceProtocol": "BOT_SERVICE_PROTOCOL",
         "botServiceHost": "BOT_SERVICE_HOST",
         "platformServiceHost": "PLATFORM_SERVICE_HOST"
