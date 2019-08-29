@@ -139,73 +139,81 @@ const HandleMessage = function (req, res) {
         event.message.text = event.message.quick_reply.payload;
       }
 
-
+      // TODO getting data from channels
       // await GetChannelDetailsFromRedis(whatsAppTwilioData.accountSid, "webchat", whatsAppTwilioData.botNumber)
-      await GetChannelDetailsFromRedis("368294987165077", "facebook", "368294987165077")
-        .then(async function (channelData) {
-          console.log(channelData);
+      // await GetChannelDetailsFromRedis("368294987165077", "facebook", "368294987165077")
+      //   .then(async function (channelData) {
+      //     console.log(channelData);
 
-          //           { direction: 'in',
-          //   bid: '5d036f9ab2e7161945e07647',
-          //   platform: 'facebook',
-          //   engagement: 'facebook-chat',
-          //   from: { id: '2291570924231124', raw: {} },
-          //   to: { id: '2057280104578620', raw: {} },
-          //   message: { type: 'text', data: 'cancel' } }
-          // { tenant: '247', company: '703' }
+      //           { direction: 'in',
+      //   bid: '5d036f9ab2e7161945e07647',
+      //   platform: 'facebook',
+      //   engagement: 'facebook-chat',
+      //   from: { id: '2291570924231124', raw: {} },
+      //   to: { id: '2057280104578620', raw: {} },
+      //   message: { type: 'text', data: 'cancel' } }
+      // { tenant: '247', company: '703' }
 
-          //Create payload for dispatcher
-          let payload = Payload.Payload();
-          payload.direction = "in";
-          payload.platform = "webchat";
-          payload.engagement = "webchat-chat";
-          // payload.bid = channelData.botID;
-          
-          payload.bid = "5d19ea21767bd746317e399b";
+      //Create payload for dispatcher
+      let payload = Payload.Payload();
+      payload.direction = "in";
+      payload.platform = "webchat";
+      payload.engagement = "webchat-chat";
+      // payload.bid = channelData.botID;
 
-          payload.from.id = event.sender.id;
 
-          if (payload.from.id === "") {
-            payload.from.id = "senderid";
+      // TODO getting botID data from channels
+      payload.bid = "5d19ea21767bd746317e399b";
 
-          }
 
-          payload.to.id = event.recipient.id;
-          if (payload.to.id === "") {
-            payload.to.id = "recipientid";
+      // TODO getting from data from webchat
+      payload.from.id = event.sender.id;
 
-          }
+      // if (payload.from.id === "") {
+      payload.from.id = "senderid";
 
-          payload.message.type = GetEventType(event);
-          payload.message.data = GetEventData(event);
+      // }
 
-          console.log("Payload to Dispatcher : ");
-          console.log(JSON.stringify(payload));
 
-          // dispatcher.InvokeDispatch(company, tenant, payload).then(function (data) {
-          await dispatcher.InvokeDispatch("749", "555", payload).then(async function (data) {
-            console.log("Payload from Dispatcher : ");
-            console.log(JSON.stringify(data));
-            let response = await Send2WebChat(data).then(function (response) {
-              console.log(response);
-              console.log(JSON.stringify(response));
+      // TODO getting to data from channels
+      payload.to.id = event.recipient.id;
+      // if (payload.to.id === "") {
+      payload.to.id = "recipientid";
 
-              res.end(JSON.stringify(response));
-              // res.end(`{"messaging_type":"RESPONSE","recipient":{"id":"2405577362863983"},"message":{"attachment":{"type":"template","payload":{"template_type":"generic","elements":[{"title":"PIZZA","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/pzp.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Pizza Menu","payload":"pizza_menu"}]},{"title":"PASTA","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/shrimp.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Pasta Menu","payload":"pasta_menu"}]},{"title":"SIDES","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/potatto.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Sides Menu","payload":"sides_menu"}]},{"title":"DRINKS","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/cinderella-recipe-non-alcoholic-759631-14-5b3f9c4d46e0fb00370dd350.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Drinks Menu","payload":"drinks_menu"}]}]}}}}`);
-            }).catch(function (error) {
-              console.log("Error from Dispatcher : ");
-              console.log(error);
-            });
-          }).catch(function (error) {
-            console.log("Error from Dispatcher : ");
-            console.log(error);
-          });
-        })
-        .catch(function (error) {
-          console.log("\n======== Exception thrown from GetChannelDetailsFromRedis ========");
+      // }
+
+      payload.message.type = GetEventType(event);
+      payload.message.data = GetEventData(event);
+
+      console.log("Payload to Dispatcher : ");
+      console.log(JSON.stringify(payload));
+
+      // dispatcher.InvokeDispatch(company, tenant, payload).then(function (data) {
+
+      // TODO getting company data from channels
+      await dispatcher.InvokeDispatch("749", "555", payload).then(async function (data) {
+        console.log("Payload from Dispatcher : ");
+        console.log(JSON.stringify(data));
+        let response = await Send2WebChat(data).then(function (response) {
+          console.log(response);
+          console.log(JSON.stringify(response));
+
+          res.end(JSON.stringify(response));
+          // res.end(`{"messaging_type":"RESPONSE","recipient":{"id":"2405577362863983"},"message":{"attachment":{"type":"template","payload":{"template_type":"generic","elements":[{"title":"PIZZA","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/pzp.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Pizza Menu","payload":"pizza_menu"}]},{"title":"PASTA","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/shrimp.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Pasta Menu","payload":"pasta_menu"}]},{"title":"SIDES","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/potatto.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Sides Menu","payload":"sides_menu"}]},{"title":"DRINKS","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/cinderella-recipe-non-alcoholic-759631-14-5b3f9c4d46e0fb00370dd350.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Drinks Menu","payload":"drinks_menu"}]}]}}}}`);
+        }).catch(function (error) {
+          console.log("Error from Dispatcher : ");
           console.log(error);
-          res.send(500);
-        })
+        });
+      }).catch(function (error) {
+        console.log("Error from Dispatcher : ");
+        console.log(error);
+      });
+      // })
+      // .catch(function (error) {
+      //   console.log("\n======== Exception thrown from GetChannelDetailsFromRedis ========");
+      //   console.log(error);
+      //   res.send(500);
+      // })
 
 
     } else {
