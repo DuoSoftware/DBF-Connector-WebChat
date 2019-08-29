@@ -88,9 +88,9 @@ const ValidateInQuickBotMode = function (req, res) {
 const HandleMessage = function (req, res) {
 
   //commenting this line since we are getting message did read lines as well
-  //console.log("---------------------------------------------------");
-  //console.log(JSON.stringify(req.body));
-  //console.log("---------------------------------------------------");
+  console.log("---------------------------------------------------");
+  console.log(JSON.stringify(req.body));
+  console.log("---------------------------------------------------");
 
   const company = req.params.company;
   const tenant = req.params.tenant;
