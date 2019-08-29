@@ -57,7 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
-/config/default.js
+config/default.js
+
+.vscode
 
 #IDE
 .idea/

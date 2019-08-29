@@ -2,11 +2,13 @@ const request = require('request'),
   config = require('config');
 
 const ExchangeToken = (shortLivedToken) => {
-  const appID = config.Facebook.appID;
-  const appSecret = config.Facebook.appSecret;
+  const appID = config.Facebook.appID; //'877968375673377';
+  const appSecret = config.Facebook.appSecret; //'11c1f55e2a958d1bdba7bebe51a6fb6b';
 
-  if (!shortLivedToken)
+  if (!shortLivedToken) {
+    console.log("FacebookHandler::ExchangeToken - Invalid short lived token.");
     return Promise.reject("FacebookHandler::ExchangeToken - Invalid short lived token.");
+  }
   
   return new Promise((resolve, reject) => {
     request({
@@ -74,7 +76,76 @@ const GetProfileByPSID = (psid, page_access_token, profile_fields) => {
 
 }
 
+const SubscribeToApps = (pageId, pageToken) => {
+  if (!pageId) {
+    console.log("FacebookHandler::SubscribeToApps - Invalid page id");
+    return Promise.reject("FacebookHandler::SubscribeToApps - Invalid page id");
+  }
+
+  if (!pageToken) {
+    console.log("FacebookHandler::SubscribeToApps - Invalid page access token.");
+    return Promise.reject("FacebookHandler::SubscribeToApps - Invalid page access token.");
+  }
+  
+  return new Promise((resolve, reject) => {
+    request({
+      method: 'POST',
+      url: `https://graph.facebook.com/v3.3/${pageId}/subscribed_apps`,
+      qs: {subscribed_fields: "messages, messaging_postbacks, messaging_optins, message_deliveries, message_reads, messaging_referrals"},
+      json: {access_token: pageToken}
+    }, (error, response, body) => {
+      if (error) { 
+        console.log('Failed to subscribe to the app', error); 
+        reject({"success": false, "message": "", "data": error});
+      }
+      
+      if (body.success || body.success === "true") {
+        console.log("Successfully subscribe to the app");
+        resolve({"success": true});
+      } else {
+        console.log('Failed to subscribe the app'); 
+        reject({"success": false});
+      }
+    });
+  });
+}
+
+const UnsubscribeApps = (pageId, pageToken) => {
+  if (!pageId) {
+    console.log("FacebookHandler::UnsubscribeApps - Invalid page id");
+    return Promise.reject("FacebookHandler::UnsubscribeApps - Invalid page id");
+  }
+
+  if (!pageToken) {
+    console.log("FacebookHandler::UnsubscribeApps - Invalid page access token.");
+    return Promise.reject("FacebookHandler::UnsubscribeApps - Invalid page access token.");
+  }
+  
+  return new Promise((resolve, reject) => {
+    request({
+      method: 'DELETE',
+      url: `https://graph.facebook.com/v3.3/${pageId}/subscribed_apps`,
+      json: {access_token: pageToken}
+    }, (error, response, body) => {
+      if (error) { 
+        console.log('Failed to unsubscribe the app', error); 
+        reject({"success": false, "message": "Failed to unsubscribe the app", "data": error});
+      }
+      
+      if (body.success || body.success === "true") {
+        console.log("Successfully unsubscribe the app");
+        resolve({"success": true});
+      } else {
+        console.log('Failed to unsubscribe the app'); 
+        reject({"success": false});
+      }
+    });
+  });
+}
+
 module.exports = {
   ExchangeToken,
-  GetProfileByPSID
+  GetProfileByPSID,
+  SubscribeToApps,
+  UnsubscribeApps
 }

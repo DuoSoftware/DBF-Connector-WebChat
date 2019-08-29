@@ -1,5 +1,5 @@
 {
-  "name": "dbf-connector-whatsapp",
+  "name": "dbf-connector-facebook",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -8,31 +8,29 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DuoSoftware/DBF-Connector-WhatsApp.git"
+    "url": "git+https://github.com/DuoSoftware/DBF-Connector-Facebook.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/DuoSoftware/DBF-Connector-WhatsApp/issues"
+    "url": "https://github.com/DuoSoftware/DBF-Connector-Facebook/issues"
   },
-  "homepage": "https://github.com/DuoSoftware/DBF-Connector-WhatsApp#readme",
+  "homepage": "https://github.com/DuoSoftware/DBF-Connector-Facebook#readme",
   "dependencies": {
     "async": "^2.6.0",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "config": "^1.28.1",
+    "dbf-congnitoauthorizer": "^1.0.1",
     "dbf-dbmodels": "^1.0.212",
-    "dbf-speechtotext": "^1.0.5",
+    "dbf-speechtotext": "^1.0.3",
     "dustjs-linkedin": "^2.7.5",
     "dvp-common-lite": "^1.0.0",
     "extend": "^3.0.1",
     "request": "^2.83.0",
-    "restify": "^6.3.4",
-    "restify-cors-middleware": "^1.1.0",
-    "restify-jwt": "^0.4.0",
+    "restify": "^8.4.0",
+    "restify-cors-middleware": "^1.1.1",
     "stringformat": "0.0.5",
-    "twilio": "^3.29.2",
-    "validator": "^9.2.0",
-    "xml": "^1.0.1"
+    "validator": "^9.2.0"
   }
 }

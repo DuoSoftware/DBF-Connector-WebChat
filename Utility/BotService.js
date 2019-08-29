@@ -1,10 +1,9 @@
 const validator = require('validator');
-const logger = require('dvp-common-lite/LogHandler/CommonLogHandler.js').logger;
-const Bot = require('dbf-dbmodels/Models/Bot').Bot;
 const config = require('config');
-const messageFormatter = require('dvp-common-lite/CommonMessageGenerator/ClientMessageJsonFormatter.js');
 const Promise = require("bluebird");
 const request = require("request");
+const Bot = require('dbf-dbmodels/Models/Bot').Bot;
+const ChannelService = require('./ChannelService');
 
 let GetBotById = function(company, tenant,bid){
 
@@ -29,7 +28,12 @@ let GetBotById = function(company, tenant,bid){
 
                     if (!_error && _response && _response.statusCode == 200&& _response.body) {
 
-                        resolve( JSON.parse(_response.body));
+                        var response = JSON.parse(_response.body);
+                        if (response.IsSuccess) {
+                            resolve(response);
+                        } else {
+                            reject(new Error(response.CustomMessage || "Failed to retrieve bot data"));
+                        }
 
                     }else{
 
@@ -103,7 +107,21 @@ let GetBotByPageId = function (pageId) {
         Bot.find({"channel_facebook.page_id": pageId},function (err, bot) {
             if(err) { reject(err); }
             if(bot && bot.length) { resolve(bot[0]); }
-            else { resolve(null) }
+            else {
+                ChannelService.GetBotChannelByPageId(pageId).then((channel) => {
+                    if (channel) {
+                        Bot.find({"_id": channel.botID},function (err, bot) {
+                            if(err) { reject(err); }
+                            if(bot && bot.length) { resolve(bot[0]); }
+                            else { resolve(null) }
+                        });
+                    } else {
+                        resolve(null);
+                    } 
+                }).catch((err) => {
+                    reject(err);
+                });
+            }
         });
     });
 
@@ -128,9 +146,50 @@ let GetBotFull = function(company, tenant,bid) {
     });
 };
 
+
+let GetBotByIdFromChannel = function(company, tenant, type,bid){
+
+    return new Promise(function(resolve, reject) {
+
+        var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/Channels/botandtype/${type}/${bid}`;
+
+        request({
+            method: "GET",
+            url: dispatchURL,
+            headers: {
+                authorization: "bearer " + config.Services.accessToken,
+                companyinfo: `${tenant}:${company}`
+            }
+
+        }, function (_error, _response, datax) {
+
+            try {
+
+                if (!_error && _response && _response.statusCode == 200 && _response.body) {
+
+                    resolve(JSON.parse(_response.body));
+
+                } else {
+
+                    let error = new Error(`There is an error in get bot`);
+                    reject(error);
+                }
+            } catch (excep) {
+
+                reject(excep);
+            }
+        });
+
+    });
+
+
+
+};
+
 module.exports = {
     GetBotById,
     GetBotByPageId,
+    GetBotByIdFromChannel,
     GetBotAppsById,
     GetBotFull
 };

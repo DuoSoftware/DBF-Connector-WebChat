@@ -10,8 +10,10 @@ module.exports = {
             "port": "SYS_REDIS_SENTINEL_PORT",
             "name": "SYS_REDIS_SENTINEL_NAME"
         }
+
     },
     "Security": {
+
         "ip": "SYS_REDIS_HOST",
         "port": "SYS_REDIS_PORT",
         "user": "SYS_REDIS_USER",
@@ -22,6 +24,7 @@ module.exports = {
             "port": "SYS_REDIS_SENTINEL_PORT",
             "name": "SYS_REDIS_SENTINEL_NAME"
         }
+
     },
     "Host": {
         "vdomain": "LB_FRONTEND",
@@ -30,31 +33,39 @@ module.exports = {
         "version": "HOST_VERSION"
     },
     "LBServer": {
+
         "ip": "LB_FRONTEND",
         "port": "LB_PORT"
+
     },
     "Services": {
         "accessToken": "GLOBAL_TOKEN",
-        "dispatcherAPIkey": "DISPATCHER_API_KEY",
+        "dispatcherAPIkey" : "DISPATCHER_APIKEY",
         "dispatchServiceProtocol": "DISPATCHER_PROTOCOL",
         "dispatchServiceHost": "DISPATCHER_HOST",
-        "dispatchServicePort": "DISPATCHER_PORT",
-        "dispatchServiceVersion": "DISPATCHER_VERSION",
         "botServiceProtocol": "BOT_SERVICE_PROTOCOL",
         "botServiceHost": "BOT_SERVICE_HOST",
         "platformServiceHost": "PLATFORM_SERVICE_HOST"
+
+    },
+    "Facebook": {
+        "appID": "FACEBOOK_APPID",
+        "appSecret": "FACEBOOK_APP_SECRET",
+        "pageAccessToken": "PAGE_ACCESS_TOKEN",
+        "appVerifyToken": "APP_VERIFY_TOKEN"
     },
     "Mongo": {
-        "ip": "SYS_MONGO_HOST",
-        "port": "SYS_MONGO_PORT",
-        "dbname": "SYS_MONGO_DB",
-        "password": "SYS_MONGO_PASSWORD",
-        "user": "SYS_MONGO_USER",
-        "replicaset": "SYS_MONGO_REPLICASETNAME",
+        "ip":"SYS_MONGO_HOST",
+        "port":"SYS_MONGO_PORT",
+        "dbname":"SYS_MONGO_DB",
+        "password":"SYS_MONGO_PASSWORD",
+        "user":"SYS_MONGO_USER",
+        "replicaset" :"SYS_MONGO_REPLICASETNAME",
         "cloudAtlas": "SYS_MONGO_CLOUDATLAS"
     },
-    "Google": { // dev
-        "translate": "TRANSLATE_KEY"
+    "Cognito": {
+        "region":  "SYS_COGNITO_REGION",
+        "userpoolId": "SYS_COGNITO_USERPOOLID",
     }
 };
 //NODE_CONFIG_DIR

@@ -1,29 +1,18 @@
 const restify = require('restify');
 const config = require('config');
-const messageFormatter = require('dvp-common-lite/CommonMessageGenerator/ClientMessageJsonFormatter.js');
 const mongoConnection = require('dbf-dbmodels/MongoConnection');
-const jwt = require('restify-jwt');
-const secret = require('dvp-common-lite/Authentication/Secret.js');
-const authorization = require('dvp-common-lite/Authentication/Authorization.js');
-const logger = require('dvp-common-lite/LogHandler/CommonLogHandler.js').logger;
+const authorization = require('dbf-congnitoauthorizer');
 const corsMiddleware = require('restify-cors-middleware');
+const workspaceAccessCheck = require('./middleware/workspaceAccessChecker');
 
-
-/*const HandleCallback = require('./Worker/MessageHandler').HandleCallback;
-const HandleMessage = require('./Worker/MessageHandler').HandleMessage;
-const Validator = require('./Worker/MessageHandler').Validate;
-const GetProfile = require('./Worker/MessegeSender').GetProfile;
-const SendDemoPostBackMessage = require('./Worker/MessegeSender').SendDemoPostBackMessage;
-const HandleUrlWhitelist = require('./Worker/MessegeSender').HandleUrlWhitelist;
-const GetUrlWhitelist = require('./Worker/MessegeSender').GetUrlWhitelist;*/
-
+const FacebookHandler = require('./Worker/FacebookHandler');
 const MessageHandler = require('./Worker/MessageHandler');
+const MessegeSender = require('./Worker/MessegeSender');
 
-const mongooseConnection = new mongoConnection();
-const port = 3675;
+const mongooseConnection  = new mongoConnection();
+const port = config.Host.port || 3675;
 const version = config.Host.version;
 const hpath = config.Host.hostpath;
-
 
 const server = restify.createServer({
     name: "webchat-connector",
@@ -32,10 +21,9 @@ const server = restify.createServer({
 
 });
 
-
 const cors = corsMiddleware({
-    allowHeaders: ['authorization']
-})
+    allowHeaders: ['authorization', 'companyInfo']
+});
 
 server.pre(cors.preflight);
 server.use(cors.actual);
@@ -57,6 +45,17 @@ server.listen(port, () => {
     console.log('%s listening at %s', server.name, server.url);
 });
 
+const GetToken = function fromHeaderOrQuerystring(req) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0].toLowerCase() === 'bearer') {
+        return req.headers.authorization.split(' ')[1];
+    } else if (req.params && req.params.Authorization) {
+        return req.params.Authorization;
+    } else if (req.query && req.query.Authorization) {
+        return req.query.Authorization;
+    }
+    return null;
+}
+
 server.get('/', (req, res) => {
     res.end(JSON.stringify({
         name: "DBF WebChat Connector",
@@ -64,6 +63,36 @@ server.get('/', (req, res) => {
     }))
 });
 
-server.get('/DBF/WebChatConnectorAPI/test', MessageHandler.Test);
-// server.post('/DBF/WhatsAppConnectorAPI/Twilio/sendMessage', MessageHandler.SendMessage);
-server.post('/DBF/WebChatConnectorAPI/incomingMessage', MessageHandler.IncomingMessage);
+server.get('/DBF/API/WebChatConnectorAPI/fb_exchange_token', FacebookHandler.ExchangeToken);
+
+server.post('/DBF/API/WebChatConnectorAPI/subscribe', FacebookHandler.SubscribeToApps);
+
+server.post('/DBF/API/:version/app/unsubscribe', FacebookHandler.UnsubscribeApps);
+
+server.post('/DBF/WebChatConnectorAPI/incomingMessage', MessageHandler.HandleMessage);
+
+server.get('/DBF/API/:version/tenant/:tenant/company/:company/bot/:bid', MessageHandler.Validate);
+
+server.post('/DBF/API/:version/webhook', MessageHandler.HandleMessageInQuickBotMode);
+
+server.get('/DBF/API/:version/webhook', MessageHandler.ValidateInQuickBotMode);
+
+server.post('/DBF/API/:version/BotConnector/Platform/:platform/UserProfile/:uid', MessegeSender.GetProfile);
+ 
+server.post('/DBF/API/:version/platform/facebook/tenant/:tenant/company/:company/bot/:bid/callback', MessageHandler.HandleCallback);
+
+server.post('/DBF/API/:version/BotConnector/Platform/:platform/Demo/:uid', authorization(), workspaceAccessCheck(), MessegeSender.SendDemoPostBackMessage);
+
+server.post('/DBF/API/:version/platform/facebook/bot/:bid/whitelist-url', authorization(), workspaceAccessCheck(), MessegeSender.HandleUrlWhitelist);
+
+server.get('/DBF/API/:version/platform/facebook/bot/:bid/whitelist-url', authorization(), workspaceAccessCheck(), MessegeSender.GetUrlWhitelist);
+
+server.get('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuGet);
+
+server.post('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuCreate);
+
+server.del('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuDelete);
+
+server.get('/DBF/API/:version/platform/facebook/bot/:bid/getstartedbutton', authorization(), workspaceAccessCheck(), MessegeSender.HandleGetStartedBtnGet);
+
+server.post('/DBF/API/:version/platform/facebook/bot/:bid/getstartedbutton', authorization(), workspaceAccessCheck(), MessegeSender.HandleGetStartedBtnCreate);

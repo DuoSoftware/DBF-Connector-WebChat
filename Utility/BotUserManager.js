@@ -6,24 +6,23 @@ const request = require("request"),
 
 let redis = new redisManager();
 
-const getBotUserStruct = (psid, bot_id, desc) => {
-  if (psid && bot_id) {
+const getBotUserStruct = (user_name, email, psid, bot_id, desc) => {
+  if (user_name && psid && bot_id) {
     return {
-      userID: psid,
+      userName: user_name,
+      email: email || psid,
+      botUniqueId: psid,
       bot: bot_id,
-      email: psid,
       roles: [],
-      groups: [],
+      groups:  [],
       description: desc || "This a bot user",
       enable: true,
-      botUser: true,
+      botUser:true,	
     }
   }
 }
 
 const createBotUser = (user, tenant, company) => {
-
-  console.log("\n=============== Entered createBotUser ===============\n");
 
   if (!config.Services || !config.Services.botServiceHost)
     return Promise.reject("Required environment variables not provided.('Services')");
@@ -44,12 +43,7 @@ const createBotUser = (user, tenant, company) => {
         companyinfo: `${tenant}:${company}`
       }
     }, (err, response, body) => {
-      console.log(err);
-      console.log(response);
-      console.log(body);
-      if (err) {
-        reject(err);
-      }
+      if (err) { reject(err); }
       try {
         if (body && body.IsSuccess) {
           resolve(user);
@@ -64,19 +58,14 @@ const createBotUser = (user, tenant, company) => {
 }
 
 const getBotUserByPSID = (psid, tenant, company) => {
-
-  console.log("\n=============== Entered getBotUserByPSID ===============\n");
-
-  if (!config.Services || !config.Services.botServiceHost) {
+  if (!config.Services || !config.Services.botServiceHost)
     return Promise.reject("Required environment variables not provided.('Services')");
-  }
 
-  if (!psid || !company || !tenant) {
+  if (!psid || !company || !tenant)
     return Promise.reject("BotUserManager::getBotUserByPSID - Invalid method parameters.");
-  }
 
-  const SRVConfig = config.Services;
-  let SRVUrl = `${SRVConfig.botServiceProtocol || 'https'}://${SRVConfig.botServiceHost}/DBF/API/${SRVConfig.botServiceVersion || '1.0.0.0'}/UserByEmail/${psid}`; // https://<host>/DBF/API/1.0.0.0/UserByEmail/<email>
+  const SRVConfig = config.Services,
+    SRVUrl = `${SRVConfig.botServiceProtocol || 'https'}://${SRVConfig.botServiceHost}/DBF/API/${SRVConfig.botServiceVersion || '1.0.0.0'}/UserByEmail/${psid}`; // https://<host>/DBF/API/1.0.0.0/UserByEmail/<email>
 
   return new Promise((resolve, reject) => {
     request({
@@ -87,16 +76,15 @@ const getBotUserByPSID = (psid, tenant, company) => {
         companyinfo: `${tenant}:${company}`
       }
     }, (err, response, body) => {
-      if (err) {
-        reject(err);
-      } else {
+      if (err) { reject(err); }
+      else {
         if (response && response.statusCode === 200) {
-          try {
-            resolve((JSON.parse(body)).Result);
-          } catch (ex) {
+          try { 
+            resolve((JSON.parse(body)).Result); 
+          } catch(ex) {
             reject(ex);
           }
-        } else {
+        }else {
           reject(new Error(`Error getting while retrieving chat user.`));
         }
       }
@@ -105,94 +93,71 @@ const getBotUserByPSID = (psid, tenant, company) => {
 }
 
 const checkBotUserSession = (psid, pageid, botid, tenant, company) => {
-  console.log("\n=============== Entered checkBotUserSession ===============");
 
-  if (!psid || !pageid || !botid || !tenant || !company) {
+  if (!psid || !pageid || !botid || !tenant || !company)
     return Promise.reject("BotUserManager::checkBotUserSession - Invalid method parameters.");
-  }
 
   let chat_user_key = `botuser:${psid}:${pageid}:${botid}`;
-  console.log("chat_user_key: " + chat_user_key);
 
   return new Promise((resolve, reject) => {
-
     // check user session in redis
-    redis.GetSession(chat_user_key).then(function (session) {
-      console.log("\n========= Session details =========");
-      console.log(JSON.stringify(session));
-
+    redis.GetSession(chat_user_key).then((session) => {
       if (session !== null) {
         // bot user session found in redis
         resolve(session);
       } else {
         // bot user session not found in redis
         // check user against database
-        getBotUserByPSID(psid, tenant, company).then(function (user) {
-
-          console.log("\n========= User data received from getBotUserByPSID =========");
-          console.log(JSON.stringify(user));
-
+        getBotUserByPSID(psid, tenant, company).then((user) => {
           if (user) {
             // bot user found in database
             // then create session in redis with bot user details
-            redis.SetSession(chat_user_key, user).then(function (user) {
-              resolve(user);
-            }).catch(function (error) {
-              console.log("Error occurred in redis SetSession: " + error);
+            redis.SetSession(chat_user_key, user).then((user) => {
+              // session created.
+              resolve(user); 
             });
-
-          } else {
+          }
+          else {
             // bot user not found in database
             // get bot details using botId
             // coz page access token that bind with bot object need to 
             // fetch users profile details
-
-
-            ////// Create bot user in DB and create a session
-
-            // BotService.GetBotById(company, tenant, botid).then(function (bot) {
-
-            // }).catch(function (error) {
-            //   console.log("Error occurred in GetBotById: " + error);
-            // });
-
-            // let botUser = getBotUserStruct(psid, botid);
-            // console.log(botUser);
-
-            // createBotUser(botUser, tenant, company).then(function (user) {
-            //   console.log(user);
-            //   if (user) {
-            //     redis.SetSession(chat_user_key, user).then(function (user) {
-            //       // session created.
-            //       // console.log(user);
-            //       resolve(user);
-            //     }).catch(function (error) {
-            //       console.log("Error occurred in redis SetSession: " + error);
-            //     });
-            //   }
-            // }).catch(function (error) {
-            //   console.log("Error occurred in createBotUser: " + error);
-            // });
-
-            ////// Create a session without creating a bot user in DB
-            let botUser = getBotUserStruct(psid, botid);
-
-            console.log("\nbotUser: " + botUser);
-
-            redis.SetSession(chat_user_key, botUser).then(function (botUser) {
-              resolve(botUser);
-            }).catch(function (error) {
-              console.log("Error occurred in redis SetSession: " + error);
-            });
+            BotService.GetBotById(company, tenant, botid).then((bot) => {
+              if (bot && bot.IsSuccess && bot.Result) {
+                let botInfo = bot.Result;
+                // fetch chat user profile details
+                fb.GetProfileByPSID(psid, botInfo.channel_facebook.page_token).then((profile) => {
+                  if (profile) {
+                    let botUser = getBotUserStruct(profile.name, null, psid, botid);
+                    createBotUser(botUser, tenant, company).then((user) => {
+                      if (user) {
+                        redis.SetSession(chat_user_key, user).then((user) => {
+                          // session created.
+                          resolve(user); 
+                        });
+                      }
+                    }, (err) => {
+                      console.log(err);
+                    });
+                  }
+                }, (err) => {
+                  console.log(err);
+                });
+              }else {
+                console.log(bot);
+              }
+            })
           }
-        }).catch(function (error) {
-          console.log("Error occurred in getBotUserByPSID: " + error);
-        });
+        }, (err) => {
+          // user profile not found in database
+        })
       }
-    }).catch(function (error) {
-      console.log("Error occurred in redis get session: " + error);
+    }, (err) => {
+      // something wrong with redis server
     });
   });
+
+  // console.log(value)
 }
 
 module.exports = {
