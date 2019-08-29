@@ -1,7 +1,7 @@
 const request = require('request');
 const config = require('config');
 const messageFormatter = require('dvp-common-lite/CommonMessageGenerator/ClientMessageJsonFormatter.js');
-let PAGE_ACCESS_TOKEN = config.Facebook.pageAccessToken;
+// let PAGE_ACCESS_TOKEN = config.Facebook.pageAccessToken;
 const TemplateService = require('../Templates/WebChatTemplate.js');
 const DynamicTemplate = require('../Templates/DynamicTemplate.js');
 const ViewService = require('../Utility/ViewService.js');
