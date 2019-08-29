@@ -47,6 +47,8 @@ module.exports = {
         "dispatchServiceVersion": "DISPATCHER_VERSION",
         "botServiceProtocol": "BOT_SERVICE_PROTOCOL",
         "botServiceHost": "BOT_SERVICE_HOST",
+        "botServicePort": "BOT_SERVICE_PORT",
+        "botServiceVersion": "BOT_SERVICE_VERSION",
         "platformServiceHost": "PLATFORM_SERVICE_HOST"
 
     },
