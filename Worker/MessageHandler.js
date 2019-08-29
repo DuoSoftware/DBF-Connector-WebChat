@@ -159,10 +159,23 @@ const HandleMessage = function (req, res) {
           payload.direction = "in";
           payload.platform = "webchat";
           payload.engagement = "webchat-chat";
-          // payload.bid = req.params.bid;
-          payload.bid = channelData.botID;
+          // payload.bid = channelData.botID;
+          
+          payload.bid = "5d19ea21767bd746317e399b";
+
           payload.from.id = event.sender.id;
+
+          if (payload.from.id === "") {
+            payload.from.id = "senderid";
+
+          }
+
           payload.to.id = event.recipient.id;
+          if (payload.to.id === "") {
+            payload.to.id = "recipientid";
+
+          }
+
           payload.message.type = GetEventType(event);
           payload.message.data = GetEventData(event);
 
@@ -175,6 +188,8 @@ const HandleMessage = function (req, res) {
             console.log(JSON.stringify(data));
             let response = await Send2WebChat(data).then(function (response) {
               console.log(response);
+              console.log(JSON.stringify(response));
+
               res.end(JSON.stringify(response));
               // res.end(`{"messaging_type":"RESPONSE","recipient":{"id":"2405577362863983"},"message":{"attachment":{"type":"template","payload":{"template_type":"generic","elements":[{"title":"PIZZA","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/pzp.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Pizza Menu","payload":"pizza_menu"}]},{"title":"PASTA","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/shrimp.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Pasta Menu","payload":"pasta_menu"}]},{"title":"SIDES","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/potatto.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Sides Menu","payload":"sides_menu"}]},{"title":"DRINKS","subtitle":"","image_url":"https://s3.amazonaws.com/botmediastorage/501/676/cinderella-recipe-non-alcoholic-759631-14-5b3f9c4d46e0fb00370dd350.jpg","default_action":{"type":"web_url","url":"https://smoothflow.io","messenger_extensions":true,"webview_height_ratio":"full","fallback_url":"https://smoothflow.io"},"buttons":[{"type":"postback","title":"Drinks Menu","payload":"drinks_menu"}]}]}}}}`);
             }).catch(function (error) {
@@ -189,6 +204,7 @@ const HandleMessage = function (req, res) {
         .catch(function (error) {
           console.log("\n======== Exception thrown from GetChannelDetailsFromRedis ========");
           console.log(error);
+          res.send(500);
         })
 
 
@@ -219,6 +235,8 @@ Send2WebChat = function (data) {
         data.message.outmessage[0] = temp;
       }
 
+      let responseArray = [];
+
       for (var value of data.message.outmessage) {
         let newData = data;
         newData.message.outmessage = {};
@@ -228,42 +246,50 @@ Send2WebChat = function (data) {
           case "action":
             message = await SendMessenger.SendAction(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break;
           case "text":
             message = await SendMessenger.SendMessage(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break;
           case "attachment":
             message = await SendMessenger.SendAttachment(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break;
           case "quickreply":
             message = await SendMessenger.SendQuickReply(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break;
           case "card":
             message = await SendMessenger.SendCard(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break;
           case "button":
             message = await SendMessenger.SendButton(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break;
           case "media":
             message = SendMessenger.SendMedia(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break;
           case "reciept":
             message = SendMessenger.SendReciept(newData);
             console.log(message);
-            resolve(message);
+            responseArray.push(message);
+            // resolve(message);
             break
           default:
             data.message.outmessage.type = "text";
@@ -273,6 +299,9 @@ Send2WebChat = function (data) {
 
         }
       }
+
+      resolve(responseArray);
+
       console.log("Request completed. \n");
     } else {
       console.log("There is no out message found ");
