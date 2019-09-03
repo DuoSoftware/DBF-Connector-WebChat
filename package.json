@@ -27,6 +27,7 @@
     "dustjs-linkedin": "^2.7.5",
     "dvp-common-lite": "^1.0.0",
     "extend": "^3.0.1",
+    "node-rest-client": "^3.1.0",
     "request": "^2.83.0",
     "restify": "^8.4.0",
     "restify-cors-middleware": "^1.1.1",

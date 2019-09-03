@@ -8,6 +8,7 @@ let redis = new redisManager();
 const messageFormatter = require('dvp-common-lite/CommonMessageGenerator/ClientMessageJsonFormatter.js');
 // const Bot = require('dbf-dbmodels/Models/Bot').Bot;
 const Channel = require('dbf-dbmodels/Models/Channels').channel;
+var Client = require('node-rest-client').Client;
 
 const GetEventType = (event) => {
   var retType;
@@ -497,10 +498,87 @@ const HandleCallback = function (req, res) {
 
 };
 
+const SaveContext = function (req, res) {
+
+  // domain = "https://hx3wkswmv1.execute-api.us-east-1.amazonaws.com/Prod"
+  // 	config["DispatcherDomain"] = domain
+  // 	Common.SaveConfig(config)
+  // }
+
+  // URL := domain + "/DBF/API/1.0.0/setContext/" + sessionId + "/" + contextKey + "/" + contextValue
+  // Method := "GET"
+
+
+  //     request({
+  //           url: 'https://hx3wkswmv1.execute-api.us-east-1.amazonaws.com/Prod/DBF/API/1.0.0/setContext/'+ req.body.SessionID + "/" + req.body.ContextKey + "/" + req.body.ContextValue,
+  //           method: 'GET'
+  //       }, function (error, response) {
+  //           if (error) {
+  //               console.log('Error sending card : ', error);
+  //               reject(response.body.error);
+  //           } else if (response.body.error) {
+  //               console.log('Error: ', response.body.error);
+  //               reject(response.body.error);
+  //           } else {
+  //               resolve(response.body);
+  //           }
+  //       });
+
+
+  var host = '';
+
+  if (config.Host.environment === "live") {
+    host = 'https://hx3wkswmv1.execute-api.us-east-1.amazonaws.com/Prod/DBF/API/1.0.0/setContext/' + req.body.SessionID + "/" + req.body.ContextKey + "/" + req.body.ContextValue;
+  } else {
+    host = 'https://3yi8zs68kb.execute-api.us-east-1.amazonaws.com/Prod/DBF/API/1.0.0/setContext/' + req.body.SessionID + "/" + req.body.ContextKey + "/" + req.body.ContextValue;
+  }
+
+  let args = {
+    headers: {
+      "companyinfo": "1:103",
+      "Content-Type": "application/json",
+      "x-api-key": "7UpMhY6cZi1E3YnczwKk7EA0iEyCCA81RVM9Lh0b"
+    }
+  };
+
+  //           headerTokens["x-api-key"] = "7UpMhY6cZi1E3YnczwKk7EA0iEyCCA81RVM9Lh0b"
+  // headerTokens["companyinfo"] = "1:103"
+  // headerTokens["Content-Type"] = "application/json"
+
+
+  let client = new Client();
+
+  // console.log("===================host===================");
+  // console.log(host);
+  // console.log("===================args===================");
+  // console.log(args);
+
+  client.get(host, args, function (data, response) {
+    // console.log("===================data===================");
+    // console.log(data);
+
+    res.end(JSON.stringify(data));
+    // let respond = JSON.parse(data.toString('utf8'));
+
+    // console.log("===================respond===================");
+    // console.log(respond);
+
+    // var json = {
+    //     'IsSuccess': respond.IsSuccess,
+    //     'url': 'https://s3.amazonaws.com/' + bucketName + '/' + imageName
+    // };
+    // res.send(json);
+    // return next();
+  });
+
+
+};
+
 module.exports = {
-  Validate,
-  ValidateInQuickBotMode,
   HandleMessage,
-  HandleMessageInQuickBotMode,
-  HandleCallback
+  SaveContext
+  // Validate,
+  // ValidateInQuickBotMode,
+  // HandleMessageInQuickBotMode,
+  // HandleCallback
 }

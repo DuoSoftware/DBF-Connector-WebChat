@@ -27,6 +27,7 @@ module.exports = {
 
     },
     "Host": {
+        "environment": "HOST_ENVIRONMENT",
         "vdomain": "LB_FRONTEND",
         "domain": "HOST_NAME",
         "port": "HOST_PORT",

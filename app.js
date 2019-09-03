@@ -63,36 +63,39 @@ server.get('/', (req, res) => {
     }))
 });
 
-server.get('/DBF/API/WebChatConnectorAPI/fb_exchange_token', FacebookHandler.ExchangeToken);
-
-server.post('/DBF/API/WebChatConnectorAPI/subscribe', FacebookHandler.SubscribeToApps);
-
-server.post('/DBF/API/:version/app/unsubscribe', FacebookHandler.UnsubscribeApps);
 
 server.post('/DBF/WebChatConnectorAPI/incomingMessage', MessageHandler.HandleMessage);
 
-server.get('/DBF/API/:version/tenant/:tenant/company/:company/bot/:bid', MessageHandler.Validate);
+server.post('/DBF/WebChatConnectorAPI/saveContext', MessageHandler.SaveContext);
 
-server.post('/DBF/API/:version/webhook', MessageHandler.HandleMessageInQuickBotMode);
+// server.get('/DBF/API/WebChatConnectorAPI/fb_exchange_token', FacebookHandler.ExchangeToken);
 
-server.get('/DBF/API/:version/webhook', MessageHandler.ValidateInQuickBotMode);
+// server.post('/DBF/API/WebChatConnectorAPI/subscribe', FacebookHandler.SubscribeToApps);
 
-server.post('/DBF/API/:version/BotConnector/Platform/:platform/UserProfile/:uid', MessegeSender.GetProfile);
+// server.post('/DBF/API/:version/app/unsubscribe', FacebookHandler.UnsubscribeApps);
+
+// server.get('/DBF/API/:version/tenant/:tenant/company/:company/bot/:bid', MessageHandler.Validate);
+
+// server.post('/DBF/API/:version/webhook', MessageHandler.HandleMessageInQuickBotMode);
+
+// server.get('/DBF/API/:version/webhook', MessageHandler.ValidateInQuickBotMode);
+
+// server.post('/DBF/API/:version/BotConnector/Platform/:platform/UserProfile/:uid', MessegeSender.GetProfile);
  
-server.post('/DBF/API/:version/platform/facebook/tenant/:tenant/company/:company/bot/:bid/callback', MessageHandler.HandleCallback);
+// server.post('/DBF/API/:version/platform/facebook/tenant/:tenant/company/:company/bot/:bid/callback', MessageHandler.HandleCallback);
 
-server.post('/DBF/API/:version/BotConnector/Platform/:platform/Demo/:uid', authorization(), workspaceAccessCheck(), MessegeSender.SendDemoPostBackMessage);
+// server.post('/DBF/API/:version/BotConnector/Platform/:platform/Demo/:uid', authorization(), workspaceAccessCheck(), MessegeSender.SendDemoPostBackMessage);
 
-server.post('/DBF/API/:version/platform/facebook/bot/:bid/whitelist-url', authorization(), workspaceAccessCheck(), MessegeSender.HandleUrlWhitelist);
+// server.post('/DBF/API/:version/platform/facebook/bot/:bid/whitelist-url', authorization(), workspaceAccessCheck(), MessegeSender.HandleUrlWhitelist);
 
-server.get('/DBF/API/:version/platform/facebook/bot/:bid/whitelist-url', authorization(), workspaceAccessCheck(), MessegeSender.GetUrlWhitelist);
+// server.get('/DBF/API/:version/platform/facebook/bot/:bid/whitelist-url', authorization(), workspaceAccessCheck(), MessegeSender.GetUrlWhitelist);
 
-server.get('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuGet);
+// server.get('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuGet);
 
-server.post('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuCreate);
+// server.post('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuCreate);
 
-server.del('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuDelete);
+// server.del('/DBF/API/:version/platform/facebook/bot/:bid/persistmenu', authorization(), workspaceAccessCheck(), MessegeSender.HandlePersistMenuDelete);
 
-server.get('/DBF/API/:version/platform/facebook/bot/:bid/getstartedbutton', authorization(), workspaceAccessCheck(), MessegeSender.HandleGetStartedBtnGet);
+// server.get('/DBF/API/:version/platform/facebook/bot/:bid/getstartedbutton', authorization(), workspaceAccessCheck(), MessegeSender.HandleGetStartedBtnGet);
 
-server.post('/DBF/API/:version/platform/facebook/bot/:bid/getstartedbutton', authorization(), workspaceAccessCheck(), MessegeSender.HandleGetStartedBtnCreate);
+// server.post('/DBF/API/:version/platform/facebook/bot/:bid/getstartedbutton', authorization(), workspaceAccessCheck(), MessegeSender.HandleGetStartedBtnCreate);
