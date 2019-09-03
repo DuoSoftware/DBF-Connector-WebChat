@@ -41,7 +41,7 @@ module.exports = {
     },
     "Services": {
         "accessToken": "GLOBAL_TOKEN",
-        "dispatcherAPIkey" : "DISPATCHER_APIKEY",
+        "dispatcherAPIkey" : "DISPATCHER_API_KEY",
         "dispatchServiceProtocol": "DISPATCHER_PROTOCOL",
         "dispatchServiceHost": "DISPATCHER_HOST",
         "dispatchServicePort": "DISPATCHER_PORT",
