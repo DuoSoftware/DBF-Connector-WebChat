@@ -394,6 +394,7 @@ let GetChannelDetails = (accountSid, type, fromID) => {
 
     let jsonString;
 
+    //
     if (fromID === undefined || fromID === "") {
       console.log("From ID is empty. Please enter a from ID");
       jsonString = messageFormatter.FormatMessage(undefined, "From ID is empty. Please enter a from ID", false, undefined);
