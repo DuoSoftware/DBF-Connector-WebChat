@@ -523,11 +523,18 @@ const HandleCallback = function (req, res) {
 const GetSessionsByBotID = function (req, res) {
 
 
-  let webchat_session_key_format = "webchatsession:" + req.params.bid + ":*";
+  let webchatSessionKeyFormat = "webchatsession:" + req.params.bid + ":*";
 
-  redis.GetAllKeysByFormat(webchat_session_key_format).then((webchat_keys) => {
+  redis.GetAllKeysByFormat(webchatSessionKeyFormat).then((webchatKeys) => {
 
-    console.log(webchat_keys);
+    let finalWebChatKeys = [];
+
+    webchatKeys.forEach(webchatKey => {
+      let chatKey = webchatKey.split("webchatsession:" + req.params.bid + ":");
+
+      finalWebChatKeys.push(chatKey);
+    });
+    console.log(finalWebChatKeys);
     // session created.
     // resolve(user); 
   });
