@@ -532,11 +532,15 @@ const GetSessionsByBotID = function (req, res) {
     webchatKeys.forEach(webchatKey => {
       let chatKey = webchatKey.split("webchatsession:" + req.params.bid + ":");
 
-      finalWebChatKeys.push(chatKey);
+      finalWebChatKeys.push(chatKey[1]);
     });
     console.log(finalWebChatKeys);
     // session created.
     // resolve(user); 
+
+    jsonString = messageFormatter.FormatMessage(undefined, "Session retrieving has succeeded", true, finalWebChatKeys);
+    res.end(jsonString);
+
   });
 }
 
