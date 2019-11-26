@@ -191,7 +191,7 @@ const HandleMessage = function (req, res) {
 
 
       // save webchat session in redis
-      let webchat_session_key = "webchatsession:" + payload.bid + payload.from.id;
+      let webchat_session_key = "webchatsession:" + payload.bid + ":" + payload.from.id;
       let webchat_user = payload.from.id;
 
       redis.SetSession(webchat_session_key, webchat_user).then((webchat_user) => {
