@@ -189,6 +189,15 @@ const HandleMessage = function (req, res) {
       console.log("Payload to Dispatcher : ");
       console.log(JSON.stringify(payload));
 
+
+      // save webchat session in redis
+      let webchat_session_key = "webchatsession:" + payload.bid;
+      let webchat_user = payload.from.id;
+
+      redis.SetSession(webchat_session_key, webchat_user).then((webchat_user) => {
+        // session created.
+        // resolve(user); 
+      });
       // dispatcher.InvokeDispatch(company, tenant, payload).then(function (data) {
 
       // TODO getting company data from channels
@@ -254,52 +263,64 @@ Send2WebChat = function (data) {
         switch (newData.message.outmessage.type) {
           case "action":
             message = await SendMessenger.SendAction(newData);
-            console.log(message);
-            responseArray.push(message);
-            // resolve(message);
-            break;
-          case "text":
-            message = await SendMessenger.SendMessage(newData);
-            console.log(message);
+            console.log("Message: " + message);
             responseArray.push(message);
             // resolve(message);
             break;
           case "attachment":
             message = await SendMessenger.SendAttachment(newData);
-            console.log(message);
-            responseArray.push(message);
-            // resolve(message);
-            break;
-          case "quickreply":
-            message = await SendMessenger.SendQuickReply(newData);
-            console.log(message);
-            responseArray.push(message);
-            // resolve(message);
-            break;
-          case "card":
-            message = await SendMessenger.SendCard(newData);
-            console.log(message);
+            console.log("Message: " + message);
             responseArray.push(message);
             // resolve(message);
             break;
           case "button":
             message = await SendMessenger.SendButton(newData);
-            console.log(message);
+            console.log("Message: " + message);
+            responseArray.push(message);
+            // resolve(message);
+            break;
+          case "calendar":
+            message = await SendMessenger.SendCalendar(newData);
+            console.log("Message: " + message);
+            responseArray.push(message);
+            // resolve(message);
+            break;
+          case "card":
+            message = await SendMessenger.SendCard(newData);
+            console.log("Message: " + message);
             responseArray.push(message);
             // resolve(message);
             break;
           case "media":
             message = SendMessenger.SendMedia(newData);
-            console.log(message);
+            console.log("Message: " + message);
+            responseArray.push(message);
+            // resolve(message);
+            break;
+          case "quickreply":
+            message = await SendMessenger.SendQuickReply(newData);
+            console.log("Message: " + message);
             responseArray.push(message);
             // resolve(message);
             break;
           case "reciept":
             message = SendMessenger.SendReciept(newData);
-            console.log(message);
+            console.log("Message: " + message);
             responseArray.push(message);
             // resolve(message);
-            break
+            break;
+          case "selection":
+            message = SendMessenger.SendSelection(newData);
+            console.log("Message: " + message);
+            responseArray.push(message);
+            // resolve(message);
+            break;
+          case "text":
+            message = await SendMessenger.SendMessage(newData);
+            console.log("Message: " + message);
+            responseArray.push(message);
+            // resolve(message);
+            break;
           default:
             data.message.outmessage.type = "text";
             data.message.outmessage.message = "TypeError!"
@@ -499,6 +520,19 @@ const HandleCallback = function (req, res) {
 
 };
 
+const GetSessionsByBotID = function (req, res) {
+
+
+  let webchat_session_key = "webchatsession:" + req.params.bid;
+
+  redis.GetSession(webchat_session_key).then((webchat_users) => {
+
+    console.log(webchat_users);
+    // session created.
+    // resolve(user); 
+  });
+}
+
 const SaveContext = function (req, res) {
 
   // domain = "https://hx3wkswmv1.execute-api.us-east-1.amazonaws.com/Prod"
@@ -576,6 +610,7 @@ const SaveContext = function (req, res) {
 };
 
 module.exports = {
+  GetSessionsByBotID,
   HandleMessage,
   SaveContext
   // Validate,
