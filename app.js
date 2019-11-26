@@ -9,7 +9,7 @@ const FacebookHandler = require('./Worker/FacebookHandler');
 const MessageHandler = require('./Worker/MessageHandler');
 const MessegeSender = require('./Worker/MessegeSender');
 
-const mongooseConnection  = new mongoConnection();
+const mongooseConnection = new mongoConnection();
 const port = config.Host.port || 3675;
 const version = config.Host.version;
 const hpath = config.Host.hostpath;
@@ -68,6 +68,8 @@ server.post('/DBF/WebChatConnectorAPI/incomingMessage', MessageHandler.HandleMes
 
 server.post('/DBF/WebChatConnectorAPI/saveContext', MessageHandler.SaveContext);
 
+server.get('/DBF/WebChatConnectorAPI/getSessionsByBotID/:bid', MessageHandler.GetSessionsByBotID);
+
 // server.get('/DBF/API/WebChatConnectorAPI/fb_exchange_token', FacebookHandler.ExchangeToken);
 
 // server.post('/DBF/API/WebChatConnectorAPI/subscribe', FacebookHandler.SubscribeToApps);
@@ -81,7 +83,7 @@ server.post('/DBF/WebChatConnectorAPI/saveContext', MessageHandler.SaveContext);
 // server.get('/DBF/API/:version/webhook', MessageHandler.ValidateInQuickBotMode);
 
 // server.post('/DBF/API/:version/BotConnector/Platform/:platform/UserProfile/:uid', MessegeSender.GetProfile);
- 
+
 // server.post('/DBF/API/:version/platform/facebook/tenant/:tenant/company/:company/bot/:bid/callback', MessageHandler.HandleCallback);
 
 // server.post('/DBF/API/:version/BotConnector/Platform/:platform/Demo/:uid', authorization(), workspaceAccessCheck(), MessegeSender.SendDemoPostBackMessage);
