@@ -191,7 +191,7 @@ const HandleMessage = function (req, res) {
 
 
       // save webchat session in redis
-      let webchat_session_key = "webchatsession:" + payload.bid;
+      let webchat_session_key = "webchatsession:" + payload.bid + payload.from.id;
       let webchat_user = payload.from.id;
 
       redis.SetSession(webchat_session_key, webchat_user).then((webchat_user) => {
@@ -523,11 +523,11 @@ const HandleCallback = function (req, res) {
 const GetSessionsByBotID = function (req, res) {
 
 
-  let webchat_session_key = "webchatsession:" + req.params.bid;
+  let webchat_session_key_format = "webchatsession:" + req.params.bid + ":*";
 
-  redis.GetSession(webchat_session_key).then((webchat_users) => {
+  redis.GetAllKeysByFormat(webchat_session_key_format).then((webchat_keys) => {
 
-    console.log(webchat_users);
+    console.log(webchat_keys);
     // session created.
     // resolve(user); 
   });
