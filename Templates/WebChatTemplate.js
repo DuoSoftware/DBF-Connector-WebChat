@@ -30,6 +30,52 @@ class WebChatTemplate {
 
     Generate() {
         switch (this.TemplateType) {
+            case "attachment":
+                this.TemplateJSON.message = {
+                    attachment: {
+                        type: this.CommonJSON.type,
+                        payload: {
+                            url: this.CommonJSON.payload.url,
+                            is_reusable: true
+                        }
+                    }
+                }
+                break;
+            case "button":
+                this.TemplateJSON = GetButtonsJSON(this.CommonJSON, this.TemplateJSON);
+                break;
+            case "calendar":
+                this.TemplateJSON.message = {
+                    attachment: {
+                        type: "calendar",
+                        payload: {
+                            id: this.CommonJSON
+                        }
+                    }
+                }
+                break;
+            case "card":
+                this.TemplateJSON = GetCardJSON(this.CommonJSON, this.TemplateJSON);
+                break;
+            case "general":
+                this.TemplateJSON = GetGeneralJSON(this.CommonJSON, this.TemplateJSON);
+                break;
+            case "media":
+                this.TemplateJSON = GetMediaCardJSON(this.CommonJSON, this.TemplateJSON);
+                break;
+            case "quickreply":
+                if (this.CommonJSON.text) {
+                    this.TemplateJSON = GetQuickReplyJSON(this.CommonJSON, this.TemplateJSON);
+                } else {
+                    console.log("Fatal Error : Not enough quick reply items to display");
+                }
+                break;
+            case "receipt":
+                this.TemplateJSON = GetReceiptJSON(this.CommonJSON, this.TemplateJSON);
+                break;
+            case "selection":
+                this.TemplateJSON = GetSelectionJSON(this.CommonJSON, this.TemplateJSON);
+                break;
             case "text":
                 this.TemplateJSON.message.text = this.CommonJSON.text;
                 // this.TemplateJSON.message = {
@@ -42,36 +88,6 @@ class WebChatTemplate {
                 //     }
                 // }
                 break;
-            case "card":
-                this.TemplateJSON = GetCardJSON(this.CommonJSON, this.TemplateJSON);
-                break;
-            case "attachment":
-                this.TemplateJSON.message = {
-                    attachment: {
-                        type: this.CommonJSON.type,
-                        payload: {
-                            url: this.CommonJSON.payload.url,
-                            is_reusable: true
-                        }
-                    }
-                }
-                break;
-            case "quickreply":
-                if (this.CommonJSON.text) {
-                    this.TemplateJSON = GetQuickReplyJSON(this.CommonJSON, this.TemplateJSON);
-                } else {
-                    console.log("Fatal Error : Not enough quick reply items to display");
-                }
-                break;
-            case "media":
-                this.TemplateJSON = GetMediaCardJSON(this.CommonJSON, this.TemplateJSON);
-                break;
-            case "button":
-                this.TemplateJSON = GetButtonsJSON(this.CommonJSON, this.TemplateJSON);
-                break;
-            case "receipt":
-                this.TemplateJSON = GetReceiptJSON(this.CommonJSON, this.TemplateJSON);
-                break;
             default:
                 console.log("ERROR : Unsupported response type.");
                 this.result.message = "ERROR : Unsupported response type."
@@ -79,6 +95,12 @@ class WebChatTemplate {
         }
         console.log("Payload to WebChat : ")
         console.log(JSON.stringify(this.TemplateJSON));
+
+        // Payload to WebChat : 
+        // {"audienceID":"recipientid","message":{"text":"Please select title","quick_replies":[{"content_type":"text","title":"Mr",
+        // "payload":"mr"},{"content_type":"text","title":"Miss","payload":"miss"},{"content_type":"text","title":"Mrs","payload":"mrs"},
+        // {"content_type":"text","title":"Ms","payload":"ms"}]},"messaging_type":"RESPONSE","webchatID":"senderid"}
+
         return this.TemplateJSON;
     }
 }
@@ -205,6 +227,132 @@ let GetCardJSON = (CommonJSON, TemplateJSON) => {
     }
     return TemplateJSON;
 }
+
+
+let GetSelectionJSON = (CommonJSON, TemplateJSON) => {
+    TemplateJSON.message.attachment = {
+        type: "template",
+        payload: {
+            template_type: CommonJSON.type,
+            elements: [
+
+            ]
+        }
+    }
+
+    for (var i = 0; i < CommonJSON.items.length; i++) {
+        let item = CommonJSON.items[i];
+        TemplateJSON.message.attachment.payload.elements[i] = {};
+        TemplateJSON.message.attachment.payload.elements[i].title = item.title;
+        TemplateJSON.message.attachment.payload.elements[i].subtitle = item.sub_title;
+        TemplateJSON.message.attachment.payload.elements[i].image_url = item.image_url;
+        if (item.default_action) {
+            TemplateJSON.message.attachment.payload.elements[i].default_action = {
+                type: "web_url",
+                url: item.default_action.url,
+                messenger_extensions: true,
+                webview_height_ratio: "full",
+                fallback_url: item.default_action.url
+            }
+        }
+        if (item.buttons.length > 0) {
+            TemplateJSON.message.attachment.payload.elements[i].buttons = [];
+
+            for (var x = 0; x < item.buttons.length; x++) {
+                let button = item.buttons[x];
+                switch (button.type) {
+                    case "web_url":
+                        TemplateJSON.message.attachment.payload.elements[i].buttons[x] = {
+                            type: button.type,
+                            title: button.title,
+                            url: button.other_data.url
+                        }
+                        if (button.other_data.messenger_extensions) {
+                            TemplateJSON.message.attachment.payload.elements[i].buttons[x].messenger_extensions = true;
+                            TemplateJSON.message.attachment.payload.elements[i].buttons[x].webview_height_ratio = "full";
+                        }
+                        break;
+                    case "postback":
+                        TemplateJSON.message.attachment.payload.elements[i].buttons[x] = {
+                            type: button.type,
+                            title: button.title,
+                            payload: button.payload.message
+                        }
+                        break;
+                    case "phone_number":
+                        TemplateJSON.message.attachment.payload.elements[i].buttons[x] = {
+                            type: button.type,
+                            title: button.title,
+                            payload: button.other_data.phone
+                        }
+                        break;
+                    case "account_link":
+                        TemplateJSON.message.attachment.payload.elements[i].buttons[x] = {
+                            type: button.type,
+                            url: button.other_data.loginUrl
+                        }
+                        break;
+                    case "account_unlink":
+                        TemplateJSON.message.attachment.payload.elements[i].buttons[x] = {
+                            type: button.type
+                        }
+                        break;
+                    default:
+                        console.log("unknown button type.. Fatal error...")
+                        break;
+                }
+            }
+        }
+    }
+
+    if (CommonJSON.buttons && CommonJSON.buttons.length > 0) {
+        TemplateJSON.message.attachment.payload.buttons = [];
+        for (var x = 0; x < CommonJSON.buttons.length; x++) {
+            let button = CommonJSON.buttons[x];
+            switch (button.type) {
+                case "web_url":
+                    TemplateJSON.message.attachment.payload.buttons[x] = {
+                        type: button.type,
+                        title: button.title,
+                        url: button.other_data.url
+                    }
+                    break;
+                case "postback":
+                    TemplateJSON.message.attachment.payload.buttons[x] = {
+                        type: button.type,
+                        title: button.title,
+                        payload: button.payload.message
+                    }
+                    break;
+                case "phone_number":
+                    TemplateJSON.message.attachment.payload.buttons[x] = {
+                        type: button.type,
+                        title: button.title,
+                        payload: button.other_data.phone
+                    }
+                    break;
+                case "account_link":
+                    TemplateJSON.message.attachment.payload.buttons[x] = {
+                        type: button.type,
+                        url: button.other_data.loginUrl
+                    }
+                    break;
+                case "account_unlink":
+                    TemplateJSON.message.attachment.payload.buttons[x] = {
+                        type: button.type
+                    }
+                    break;
+                default:
+                    console.log("unknown button type.. Fatal error...")
+                    break;
+            }
+        }
+    }
+    return TemplateJSON;
+}
+
+
+
 
 let GetQuickReplyJSON = (CommonJSON, TemplateJSON) => {
     TemplateJSON.message.text = CommonJSON.text;

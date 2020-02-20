@@ -4,10 +4,14 @@ const async = require('async');
 
 module.exports.Convert = (TemplateType, event, CommonJSON) => {
     return new Promise(function (resolve, reject) {
+
         var TemplateJSON = CommonJSON;
+
         if (event.message.outmessage.data) {
             if (event.message.outmessage.data.type == "INT") {//conversion required...
+
                 switch (TemplateType) {
+
                     case "text":
                         ConvertText(CommonJSON, TemplateJSON, event).then(function (json) {
                             resolve(json);
@@ -15,17 +19,28 @@ module.exports.Convert = (TemplateType, event, CommonJSON) => {
                             reject(error);
                         });
                         break;
+
                     case "card":
-                        ConvertCard(CommonJSON, TemplateJSON, event).then((data)=>{
+                        ConvertCard(CommonJSON, TemplateJSON, event).then((data) => {
                             resolve(data);
-                        }).catch((error)=>{
+                        }).catch((error) => {
                             console.log(error);
                             resolve(TemplateJSON);
                         })
-
                         break;
+
+                    case "general":
+                        ConvertGeneral(CommonJSON, TemplateJSON, event).then((data) => {
+                            resolve(data);
+                        }).catch((error) => {
+                            console.log(error);
+                            resolve(TemplateJSON);
+                        })
+                        break;
+
                     case "attachment":
                         break;
+
                     case "quickreply":
                         ConvertQuickReply(CommonJSON, TemplateJSON, event).then(function (json) {
                             resolve(json);
@@ -33,18 +48,22 @@ module.exports.Convert = (TemplateType, event, CommonJSON) => {
                             reject(error);
                         });
                         break;
+
                     case "media":
                         break;
+
                     case "button":
                         break;
+
                     case "receipt":
-                        ConvertReceipt(CommonJSON, TemplateJSON, event).then((data)=>{
+                        ConvertReceipt(CommonJSON, TemplateJSON, event).then((data) => {
                             resolve(data);
-                        }).catch((error)=>{
+                        }).catch((error) => {
                             console.log(error);
                             resolve(TemplateJSON);
                         })
                         break;
+
                     default:
                         console.log("ERROR : Unsupported response type.");
                         result.message = "ERROR : Unsupported response type."
@@ -57,7 +76,7 @@ module.exports.Convert = (TemplateType, event, CommonJSON) => {
                         TemplateJSON = json;
                         resolve(TemplateJSON);
                     });
-                }else {
+                } else {
                     resolve(TemplateJSON);
                 }
             }
@@ -108,11 +127,39 @@ let ConvertCard = (CommonJSON, TemplateJSON, event) => {
     })
 }
 
+let ConvertGeneral = (CommonJSON, TemplateJSON, event) => {
+    return new Promise(function (resolve, reject) {
+        let payload = event.message.outmessage.data.payload;
+
+        if (Array.isArray(payload)) {
+            var baseItem = TemplateJSON.items[0];
+            TemplateJSON.items = []; //reset array
+
+            var funcArry = [];
+
+            for (var singleItem of payload) {
+                var newItem = baseItem;
+                funcArry.push(reshapeEach(JSON.stringify(newItem), singleItem).invoke);
+            }
+
+            async.parallel(funcArry, (err, result) => {
+                TemplateJSON.items = result;
+                resolve(TemplateJSON);
+            })
+        } else {
+            ReshapeJSON(JSON.stringify(CommonJSON), payload).then(function (json) {
+                TemplateJSON = json;
+                resolve(TemplateJSON);
+            });
+        }
+    })
+}
+
 let reshapeEach = (CommonJSONStr, payload) => {
-    return{
-        invoke: function(callback){
+    return {
+        invoke: function (callback) {
             ReshapeJSON(CommonJSONStr, payload).then(function (json) {
-                callback(null,json);
+                callback(null, json);
             });
         }
     }

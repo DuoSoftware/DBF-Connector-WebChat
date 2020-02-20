@@ -41,16 +41,18 @@ module.exports = {
     },
     "Services": {
         "accessToken": "GLOBAL_TOKEN",
-        "dispatcherAPIkey" : "DISPATCHER_API_KEY",
-        "dispatchServiceProtocol": "DISPATCHER_PROTOCOL",
-        "dispatchServiceHost": "DISPATCHER_HOST",
-        "dispatchServicePort": "DISPATCHER_PORT",
-        "dispatchServiceVersion": "DISPATCHER_VERSION",
         "botServiceProtocol": "BOT_SERVICE_PROTOCOL",
         "botServiceHost": "BOT_SERVICE_HOST",
         "botServicePort": "BOT_SERVICE_PORT",
         "botServiceVersion": "BOT_SERVICE_VERSION",
-        "platformServiceHost": "PLATFORM_SERVICE_HOST"
+        "dispatcherAPIkey": "DISPATCHER_API_KEY",
+        "dispatchServiceProtocol": "DISPATCHER_PROTOCOL",
+        "dispatchServiceHost": "DISPATCHER_HOST",
+        "dispatchServicePort": "DISPATCHER_PORT",
+        "dispatchServiceVersion": "DISPATCHER_VERSION",
+        "dispatcherURL": "DISPATCHER_URL",
+        "platformServiceHost": "PLATFORM_SERVICE_HOST",
+        "viewServiceURL": "VIEWSERVICE_URL",
 
     },
     "Facebook": {
@@ -60,16 +62,16 @@ module.exports = {
         "appVerifyToken": "APP_VERIFY_TOKEN"
     },
     "Mongo": {
-        "ip":"SYS_MONGO_HOST",
-        "port":"SYS_MONGO_PORT",
-        "dbname":"SYS_MONGO_DB",
-        "password":"SYS_MONGO_PASSWORD",
-        "user":"SYS_MONGO_USER",
-        "replicaset" :"SYS_MONGO_REPLICASETNAME",
+        "ip": "SYS_MONGO_HOST",
+        "port": "SYS_MONGO_PORT",
+        "dbname": "SYS_MONGO_DB",
+        "password": "SYS_MONGO_PASSWORD",
+        "user": "SYS_MONGO_USER",
+        "replicaset": "SYS_MONGO_REPLICASETNAME",
         "cloudAtlas": "SYS_MONGO_CLOUDATLAS"
     },
     "Cognito": {
-        "region":  "SYS_COGNITO_REGION",
+        "region": "SYS_COGNITO_REGION",
         "userpoolId": "SYS_COGNITO_USERPOOLID",
     }
 };

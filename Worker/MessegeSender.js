@@ -504,10 +504,10 @@ module.exports.SendMessage = async function (event) {
 };
 
 module.exports.SendAction = async function (event) {
-    let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
-    if (FB_PAGE_ACCESS_TOKEN == "N/A") {
-        return Promise.reject("Error getting Facebook page token.");
-    }
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token.");
+    // }
 
     let sender = event.from.id;
     let recipient = event.to.id;
@@ -543,10 +543,10 @@ module.exports.SendAction = async function (event) {
 };
 
 module.exports.SendAttachment = async function (event) {
-    let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
-    if (FB_PAGE_ACCESS_TOKEN == "N/A") {
-        return Promise.reject("Error getting Facebook page token");
-    }
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
 
     let sender = event.from.id;
     let recipient = event.to.id;
@@ -594,10 +594,10 @@ module.exports.SendAttachment = async function (event) {
 };
 
 module.exports.SendQuickReply = async function (event) {
-    let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
-    if (FB_PAGE_ACCESS_TOKEN == "N/A") {
-        return Promise.reject("Error getting Facebook page token");
-    }
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
 
     let sender = event.from.id;
     let recipient = event.to.id;
@@ -647,10 +647,10 @@ module.exports.SendQuickReply = async function (event) {
 };
 
 module.exports.SendCard = async function (event) {
-    let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
-    if (FB_PAGE_ACCESS_TOKEN == "N/A") {
-        return Promise.reject("Error getting Facebook page token");
-    }
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
 
     let sender = event.from.id;
     let recipient = event.to.id;
@@ -699,11 +699,46 @@ module.exports.SendCard = async function (event) {
     // })
 };
 
-module.exports.SendButton = async (event) => {
-    let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
-    if (FB_PAGE_ACCESS_TOKEN == "N/A") {
-        return Promise.reject("Error getting Facebook page token");
+
+module.exports.SendGeneral = async (event) => {
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
+
+    let sender = event.from.id;
+    let recipient = event.to.id;
+    let tenant = event.session.bot.tenant;
+    let company = event.session.bot.company;
+
+    var templateJSON = {};
+    if (event.message.outmessage) {
+        if (event.message.outmessage.type != "selection") {
+            console.log("Not selection type");
+            return Promise.reject("Not selection type");
+        }
     }
+
+    let generalID = event.message.outmessage.message;
+    console.log("General ID : " + generalID);
+
+    //Call to ViewService and get the Common JSON.
+    let general = await ViewService.GetGeneralByID(tenant, company, generalID);
+
+    //pass to dynamic templater and resolve
+    let updatedCommonJSON = await DynamicTemplate.Convert("general", event, general);
+
+    let template = new TemplateService.WebChatTemplate(sender, recipient, "general", updatedCommonJSON);
+    templateJSON = template.Generate();
+
+    return templateJSON;
+}
+
+module.exports.SendButton = async (event) => {
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
 
     let sender = event.from.id;
     let recipient = event.to.id;
@@ -750,11 +785,79 @@ module.exports.SendButton = async (event) => {
     // });
 }
 
-module.exports.SendMedia = (event) => {
-    let FB_PAGE_ACCESS_TOKEN = GetFBPageToken(event);
-    if (FB_PAGE_ACCESS_TOKEN == "N/A") {
-        return Promise.reject("Error getting Facebook page token");
+
+module.exports.SendSelection = async (event) => {
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
+
+    let sender = event.from.id;
+    let recipient = event.to.id;
+    let tenant = event.session.bot.tenant;
+    let company = event.session.bot.company;
+
+    var templateJSON = {};
+    if (event.message.outmessage) {
+        if (event.message.outmessage.type != "selection") {
+            console.log("Not selection type");
+            return Promise.reject("Not selection type");
+        }
     }
+
+    let selectionId = event.message.outmessage.message;
+    console.log("Selection ID : " + selectionId);
+
+    //Call to ViewService and get the Common JSON.
+    let selection = await ViewService.GetSelectionByID(tenant, company, selectionId);
+
+    //pass to dynamic templater and resolve
+    let updatedCommonJSON = await DynamicTemplate.Convert("selection", event, selection);
+
+    let template = new TemplateService.WebChatTemplate(sender, recipient, "selection", updatedCommonJSON);
+    templateJSON = template.Generate();
+
+    return templateJSON;
+}
+
+
+module.exports.SendCalendar = async (event) => {
+    // let FB_PAGE_ACCESS_TOKEN = await GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
+
+    let sender = event.from.id;
+    let recipient = event.to.id;
+    let tenant = event.session.bot.tenant;
+    let company = event.session.bot.company;
+
+    var templateJSON = {};
+    if (event.message.outmessage) {
+        if (event.message.outmessage.type != "calendar") {
+            console.log("Not calendar type");
+            return Promise.reject("Not calendar type");
+        }
+    }
+
+    let iD = event.message.outmessage.message;
+    console.log("Button ID : " + iD);
+
+    //Call to ViewService and get the Common JSON.
+    // let buttons = await ViewService.GetButtonsByID(tenant, company, Id);
+
+    //Pass it to Template service and get the specific facebook template.
+    let template = new TemplateService.WebChatTemplate(sender, recipient, "calendar", iD);
+    templateJSON = template.Generate();
+
+    return templateJSON;
+}
+
+module.exports.SendMedia = (event) => {
+    // let FB_PAGE_ACCESS_TOKEN = GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
 
     let sender = event.from.id;
     let recipient = event.to.id;
@@ -798,10 +901,10 @@ module.exports.SendMedia = (event) => {
 }
 
 module.exports.SendReciept = (event) => {
-    let FB_PAGE_ACCESS_TOKEN = GetFBPageToken(event);
-    if (FB_PAGE_ACCESS_TOKEN == "N/A") {
-        return Promise.reject("Error getting Facebook page token");
-    }
+    // let FB_PAGE_ACCESS_TOKEN = GetFBPageToken(event);
+    // if (FB_PAGE_ACCESS_TOKEN == "N/A") {
+    //     return Promise.reject("Error getting Facebook page token");
+    // }
 
     let sender = event.from.id;
     let recipient = event.to.id;

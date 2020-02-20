@@ -9,10 +9,10 @@ const FacebookHandler = require('./Worker/FacebookHandler');
 const MessageHandler = require('./Worker/MessageHandler');
 const MessegeSender = require('./Worker/MessegeSender');
 
-const mongooseConnection = new mongoConnection();
+// const mongooseConnection = new mongoConnection();
 const port = config.Host.port || 3675;
-const version = config.Host.version;
-const hpath = config.Host.hostpath;
+// const version = config.Host.version;
+// const hpath = config.Host.hostpath;
 
 const server = restify.createServer({
     name: "webchat-connector",
