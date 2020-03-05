@@ -53,7 +53,6 @@ module.exports = {
         "dispatcherURL": "DISPATCHER_URL",
         "platformServiceHost": "PLATFORM_SERVICE_HOST",
         "viewServiceURL": "VIEWSERVICE_URL",
-
     },
     "Facebook": {
         "appID": "FACEBOOK_APPID",

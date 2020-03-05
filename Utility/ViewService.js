@@ -9,7 +9,7 @@ module.exports.GetAttachmentByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/Attachment/" + id;
 
@@ -51,7 +51,7 @@ module.exports.GetReceiptByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/Receipt/" + id;
 
@@ -93,7 +93,7 @@ module.exports.GetCardByID = (tenant, company, cardid) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/Card/" + id;
 
@@ -135,7 +135,7 @@ module.exports.GetSelectionByID = (tenant, company, selectionId) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/Selection/" + id;
 
@@ -177,7 +177,7 @@ module.exports.GetQuickReplyByID = (tenant, company, quickreply_id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/QuickReply/" + id;
 
@@ -219,7 +219,7 @@ module.exports.GetMediaCardByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/MediaCard/" + id;
 
@@ -261,7 +261,7 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/ButtonList/" + id;
 
@@ -294,7 +294,7 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
 module.exports.GetGeneralByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
-        if ((config.Services && config.Services.dispatcherURL && config.Services.dispatcherURL !== "")) {
+        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
 
             var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/GeneralAsset/" + id;
 
