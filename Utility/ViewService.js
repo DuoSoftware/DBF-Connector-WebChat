@@ -329,6 +329,11 @@ module.exports.GetGeneralByID = (tenant, company, id) => {
             if (validator.isIP(config.Services.botServiceHost))
                 dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/GeneralAsset/${id}`;
 
+            console.log(dispatchURL);
+            console.log(config.Services.accessToken);
+            console.log(tenant);
+            console.log(company);
+
             request({
                 method: "GET",
                 url: dispatchURL,
