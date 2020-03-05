@@ -396,6 +396,10 @@ let GetQuickReplyJSON = (CommonJSON, TemplateJSON) => {
 }
 
 let GetMediaCardJSON = (CommonJSON, TemplateJSON) => {
+
+    console.log("CommonJSON: " + JSON.stringify(CommonJSON));
+    console.log("TemplateJSON: " + JSON.stringify(TemplateJSON));
+
     TemplateJSON.message.attachment = {
         type: "template",
         payload: {
@@ -446,6 +450,60 @@ let GetMediaCardJSON = (CommonJSON, TemplateJSON) => {
     }
     return TemplateJSON;
 }
+
+
+let GetGeneralJSON = (CommonJSON, TemplateJSON) => {
+    TemplateJSON.message.attachment = {
+        type: "template",
+        payload: {
+            template_type: "media",
+            elements: []
+        }
+    }
+
+    for (var mediaItem of CommonJSON.items) {
+        TemplateJSON.message.attachment.payload.elements[0] = {
+            media_type: mediaItem.type
+        }
+
+        if (mediaItem.media_url && mediaItem.media_url != "") {
+            TemplateJSON.message.attachment.payload.elements[0].url = mediaItem.media_url;
+        } else if (mediaItem.attachment_id && mediaItem.attachment_id != "") {
+            TemplateJSON.message.attachment.payload.elements[0].attachment_id = mediaItem.attachment_id;
+        }
+
+        if (mediaItem.buttons.length > 0) {
+            TemplateJSON.message.attachment.payload.elements[0].buttons = [];
+        }
+
+        for (var x = 0; x < mediaItem.buttons.length; x++) {
+            var button = mediaItem.buttons[x];
+            switch (button.type) {
+                case "web_url":
+                    TemplateJSON.message.attachment.payload.elements[0].buttons[x] = {
+                        type: button.type,
+                        title: button.title,
+                        url: button.other_data.url
+                    }
+                    break;
+                case "postback":
+                    TemplateJSON.message.attachment.payload.elements[0].buttons[x] = {
+                        type: button.type,
+                        title: button.title,
+                        payload: button.payload.message
+                    }
+                    break;
+                default:
+                    console.log("unknown button type.. Fatal error...")
+                    break;
+            }
+        }
+
+        break; //returning at first item because webchat is limited to size 1 array for media
+    }
+    return TemplateJSON;
+}
+
 
 let GetButtonsJSON = (CommonJSON, TemplateJSON) => {
     TemplateJSON.message.attachment = {

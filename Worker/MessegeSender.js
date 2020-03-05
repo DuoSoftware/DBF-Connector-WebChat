@@ -731,6 +731,9 @@ module.exports.SendGeneral = async (event) => {
 
     console.log("general : " + JSON.stringify(general));
 
+    //     general : {"_id":"5e60d655659e0600086386ef","name":"Test2","description":"Test2","company":749,"tenant":555,"created_at":"2020-03-05T10:36:55.585Z","updated_at":"2020-03-05T12:05:12.482Z","type":"multiple selection","title":"Test2","items":[{"buttons":[{"_id":"5e60eafa91a70a0008063e1a","buttonPayload":"TestBtn","buttonTitle":"TestBtn"}],"_id":"5e60eafa91a70a0008063e19","attachment_id":null,"itemPayload":"TestPayload","media_url":"https://www.newsfirst.lk/wp-content/uploads/2018/03/Rain_850x460_acf_cropped-2.jpg","itemTitle":"Test2"}],"__v":0}
+    // updatedCommonJSON : {"_id":"5e60d655659e0600086386ef","name":"Test2","description":"Test2","company":749,"tenant":555,"created_at":"2020-03-05T10:36:55.585Z","updated_at":"2020-03-05T12:05:12.482Z","type":"multiple selection","title":"Test2","items":[{"buttons":[{"_id":"5e60eafa91a70a0008063e1a","buttonPayload":"TestBtn","buttonTitle":"TestBtn"}],"_id":"5e60eafa91a70a0008063e19","attachment_id":null,"itemPayload":"TestPayload","media_url":"https://www.newsfirst.lk/wp-content/uploads/2018/03/Rain_850x460_acf_cropped-2.jpg","itemTitle":"Test2"}],"__v":0}
+
     //pass to dynamic templater and resolve
     let updatedCommonJSON = await DynamicTemplate.Convert("general", event, general);
 
