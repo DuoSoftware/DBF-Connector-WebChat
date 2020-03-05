@@ -56,7 +56,7 @@ module.exports = {
 
         "viewServiceURL": "VIEWSERVICE_URL",
         "GeneralAssetServiceURL": "GENERALASSET_URL",
-        "ButtonServiceURL": "BUTTON_URL",
+        "ButtonListServiceURL": "BUTTONLIST_URL",
         "MediaCardServiceURL": "MEDIACARD_URL",
         "QuickReplyServiceURL": "QUICKREPLY_URL",
         "CardServiceURL": "CARD_URL",

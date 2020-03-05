@@ -261,9 +261,9 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.ButtonServiceURL && config.Services.ButtonServiceURL !== "")) {
+        if ((config.Services && config.Services.ButtonListServiceURL && config.Services.ButtonListServiceURL !== "")) {
 
-            var URL = config.Services.ButtonServiceURL + "/DBF/API/1/ViewService/ButtonList/" + id;
+            var URL = config.Services.ButtonListServiceURL + "/DBF/API/1/ViewService/ButtonList/" + id;
 
             request({
                 method: "GET",
