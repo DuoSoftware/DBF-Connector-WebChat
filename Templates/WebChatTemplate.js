@@ -397,9 +397,6 @@ let GetQuickReplyJSON = (CommonJSON, TemplateJSON) => {
 
 let GetMediaCardJSON = (CommonJSON, TemplateJSON) => {
 
-    console.log("CommonJSON: " + JSON.stringify(CommonJSON));
-    console.log("TemplateJSON: " + JSON.stringify(TemplateJSON));
-
     TemplateJSON.message.attachment = {
         type: "template",
         payload: {
@@ -453,6 +450,11 @@ let GetMediaCardJSON = (CommonJSON, TemplateJSON) => {
 
 
 let GetGeneralJSON = (CommonJSON, TemplateJSON) => {
+
+
+    console.log("CommonJSON: " + JSON.stringify(CommonJSON));
+    console.log("TemplateJSON: " + JSON.stringify(TemplateJSON));
+
     TemplateJSON.message.attachment = {
         type: "template",
         payload: {
