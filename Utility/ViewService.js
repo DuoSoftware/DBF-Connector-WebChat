@@ -179,11 +179,11 @@ module.exports.GetQuickReplyByID = (tenant, company, quickreply_id) => {
 
         if ((config.Services && config.Services.QuickReplyServiceURL && config.Services.QuickReplyServiceURL !== "")) {
 
-            var URL = config.Services.QuickReplyServiceURL + "/DBF/API/1/ViewService/QuickReply/" + id;
+            var URL = config.Services.QuickReplyServiceURL + "/DBF/API/1/ViewService/QuickReply/" + quickreply_id;
 
-            var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/ViewService/QuickReply/${id}`;
+            var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/ViewService/QuickReply/${quickreply_id}`;
             if (validator.isIP(config.Services.botServiceHost))
-                dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/QuickReply/${id}`;
+                dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/QuickReply/${quickreply_id}`;
 
             request({
                 method: "GET",
