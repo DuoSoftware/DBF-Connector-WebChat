@@ -265,10 +265,14 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
 
             var URL = config.Services.ButtonListServiceURL + "/DBF/API/1/ViewService/ButtonList/" + id;
 
-            var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/ViewService/MediaCard/${id}`;
+            var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/ViewService/ButtonList/${id}`;
             if (validator.isIP(config.Services.botServiceHost))
-                dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/MediaCard/${id}`;
+                dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/ButtonList/${id}`;
 
+            console.log(dispatchURL);
+            console.log(config.Services.accessToken);
+            console.log(tenant);
+            console.log(company);
 
             request({
                 method: "GET",
