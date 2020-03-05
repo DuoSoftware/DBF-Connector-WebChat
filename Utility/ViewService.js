@@ -278,7 +278,17 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
                     if (!_error && _response && _response.statusCode == 200 && JSON.parse(datax).IsSuccess) {
                         resolve(JSON.parse(datax).Result);
                     } else {
-                        let error = new Error(`There is an error in get buttons`);
+                        console.log("There is an error in get buttons");
+                        console.log(error);
+
+                        console.log(URL);
+
+                        console.log(config.Services.accessToken);
+
+                        console.log(tenant);
+                        console.log(company);
+
+                        let error = new Error("There is an error in get buttons");
                         reject(error);
                     }
                 } catch (excep) {
