@@ -256,8 +256,8 @@ const HandleMessage = function (req, res) {
 
 
                 let response = await Send2WebChat(data).then(function (response) {
-                    console.log(response);
-                    console.log(JSON.stringify(response));
+                    console.log("response 1: " + response);
+                    console.log("response 2: " + JSON.stringify(response));
 
                     res.end(JSON.stringify(response));
                     // res.end(`{"messaging_type":"RESPONSE","recipient":{"id":"2405577362863983"},"message":{"attachment":
@@ -358,6 +358,7 @@ Send2WebChat = function (data) {
                     case "general":
                         message = SendMessenger.SendGeneral(newData);
                         console.log("Message: " + message);
+                        console.log("Message 2: " + JSON.stringify(message));
                         responseArray.push(message);
                     case "media":
                         message = SendMessenger.SendMedia(newData);

@@ -711,11 +711,14 @@ module.exports.SendGeneral = async (event) => {
     let tenant = event.session.bot.tenant;
     let company = event.session.bot.company;
 
+
+    console.log("======= SendGeneral ============");
+
     var templateJSON = {};
     if (event.message.outmessage) {
-        if (event.message.outmessage.type != "selection") {
-            console.log("Not selection type");
-            return Promise.reject("Not selection type");
+        if (event.message.outmessage.type != "general") {
+            console.log("Not general type");
+            return Promise.reject("Not general type");
         }
     }
 
