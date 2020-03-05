@@ -52,7 +52,14 @@ module.exports = {
         "dispatchServiceVersion": "DISPATCHER_VERSION",
         "dispatcherURL": "DISPATCHER_URL",
         "platformServiceHost": "PLATFORM_SERVICE_HOST",
+
+
         "viewServiceURL": "VIEWSERVICE_URL",
+        "GeneralAssetServiceURL": "GENERALASSET_URL",
+        "ButtonServiceURL": "BUTTON_URL",
+        "MediaCardServiceURL": "MEDIACARD_URL",
+        "QuickReplyServiceURL": "QUICKREPLY_URL",
+        "CardServiceURL": "CARD_URL",
     },
     "Facebook": {
         "appID": "FACEBOOK_APPID",

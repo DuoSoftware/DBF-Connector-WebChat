@@ -93,9 +93,9 @@ module.exports.GetCardByID = (tenant, company, cardid) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
+        if ((config.Services && config.Services.CardServiceURL && config.Services.CardServiceURL !== "")) {
 
-            var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/Card/" + id;
+            var URL = config.Services.CardServiceURL + "/DBF/API/1/ViewService/Card/" + id;
 
             request({
                 method: "GET",
@@ -177,9 +177,9 @@ module.exports.GetQuickReplyByID = (tenant, company, quickreply_id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
+        if ((config.Services && config.Services.QuickReplyServiceURL && config.Services.QuickReplyServiceURL !== "")) {
 
-            var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/QuickReply/" + id;
+            var URL = config.Services.QuickReplyServiceURL + "/DBF/API/1/ViewService/QuickReply/" + id;
 
             request({
                 method: "GET",
@@ -219,9 +219,9 @@ module.exports.GetMediaCardByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
+        if ((config.Services && config.Services.MediaCardServiceURL && config.Services.MediaCardServiceURL !== "")) {
 
-            var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/MediaCard/" + id;
+            var URL = config.Services.MediaCardServiceURL + "/DBF/API/1/ViewService/MediaCard/" + id;
 
             request({
                 method: "GET",
@@ -261,9 +261,9 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
 
-        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
+        if ((config.Services && config.Services.ButtonServiceURL && config.Services.ButtonServiceURL !== "")) {
 
-            var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/ButtonList/" + id;
+            var URL = config.Services.ButtonServiceURL + "/DBF/API/1/ViewService/ButtonList/" + id;
 
             request({
                 method: "GET",
@@ -304,9 +304,9 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
 module.exports.GetGeneralByID = (tenant, company, id) => {
 
     return new Promise(function (resolve, reject) {
-        if ((config.Services && config.Services.viewServiceURL && config.Services.viewServiceURL !== "")) {
+        if ((config.Services && config.Services.GeneralAssetServiceURL && config.Services.GeneralAssetServiceURL !== "")) {
 
-            var URL = config.Services.viewServiceURL + "/DBF/API/1/ViewService/GeneralAsset/" + id;
+            var URL = config.Services.GeneralAssetServiceURL + "/DBF/API/1/ViewService/GeneralAsset/" + id;
 
             request({
                 method: "GET",
