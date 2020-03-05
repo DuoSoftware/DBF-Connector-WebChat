@@ -728,9 +728,13 @@ module.exports.SendGeneral = async (event) => {
     //Call to ViewService and get the Common JSON.
     let general = await ViewService.GetGeneralByID(tenant, company, generalID);
 
+
+    console.log("general : " + JSON.stringify(general));
+
     //pass to dynamic templater and resolve
     let updatedCommonJSON = await DynamicTemplate.Convert("general", event, general);
 
+    console.log("updatedCommonJSON : " + JSON.stringify(updatedCommonJSON));
     let template = new TemplateService.WebChatTemplate(sender, recipient, "general", updatedCommonJSON);
     templateJSON = template.Generate();
 
