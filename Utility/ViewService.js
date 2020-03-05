@@ -181,9 +181,13 @@ module.exports.GetQuickReplyByID = (tenant, company, quickreply_id) => {
 
             var URL = config.Services.QuickReplyServiceURL + "/DBF/API/1/ViewService/QuickReply/" + id;
 
+            var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/ViewService/QuickReply/${id}`;
+            if (validator.isIP(config.Services.botServiceHost))
+                dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/QuickReply/${id}`;
+
             request({
                 method: "GET",
-                url: URL,
+                url: dispatchURL,
                 headers: {
                     "authorization": "bearer " + config.Services.accessToken,
                     "companyinfo": `${tenant}:${company}`,
@@ -223,9 +227,13 @@ module.exports.GetMediaCardByID = (tenant, company, id) => {
 
             var URL = config.Services.MediaCardServiceURL + "/DBF/API/1/ViewService/MediaCard/" + id;
 
+            var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/ViewService/MediaCard/${id}`;
+            if (validator.isIP(config.Services.botServiceHost))
+                dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/MediaCard/${id}`;
+
             request({
                 method: "GET",
-                url: URL,
+                url: dispatchURL,
                 headers: {
                     "authorization": "bearer " + config.Services.accessToken,
                     "companyinfo": `${tenant}:${company}`,
@@ -317,9 +325,13 @@ module.exports.GetGeneralByID = (tenant, company, id) => {
 
             var URL = config.Services.GeneralAssetServiceURL + "/DBF/API/1/ViewService/GeneralAsset/" + id;
 
+            var dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}/DBF/API/${config.Services.botServiceVersion}/ViewService/GeneralAsset/${id}`;
+            if (validator.isIP(config.Services.botServiceHost))
+                dispatchURL = `${config.Services.botServiceProtocol}://${config.Services.botServiceHost}:${config.Services.botServicePort}/DBF/API/${config.Services.botServiceVersion}/ViewService/GeneralAsset/${id}`;
+
             request({
                 method: "GET",
-                url: URL,
+                url: dispatchURL,
                 headers: {
                     authorization: "bearer " + config.Services.accessToken,
                     companyinfo: `${tenant}:${company}`
