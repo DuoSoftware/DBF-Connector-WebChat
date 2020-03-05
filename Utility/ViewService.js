@@ -279,7 +279,7 @@ module.exports.GetButtonsByID = (tenant, company, id) => {
                         resolve(JSON.parse(datax).Result);
                     } else {
                         console.log("There is an error in get buttons");
-                        console.log(error);
+                        console.log(_error);
 
                         console.log(URL);
 
