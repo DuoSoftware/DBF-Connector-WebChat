@@ -453,55 +453,116 @@ let GetGeneralJSON = (CommonJSON, TemplateJSON) => {
 
 
     console.log("CommonJSON: " + JSON.stringify(CommonJSON));
+
+    // CommonJSON: 
+    // {
+    //     "_id":"5e60d655659e0600086386ef",
+    //     "name":"Test2",
+    //     "description":"Test2",
+    //     "company":749,
+    //     "tenant":555,
+    //     "created_at":"2020-03-05T10:36:55.585Z",
+    //     "updated_at":"2020-03-05T12:05:12.482Z",
+    //     "type":"multiple selection",
+    //     "title":"Test2",
+    //     "items":[
+    //        {
+    //           "buttons":[
+    //              {
+    //                 "_id":"5e60eafa91a70a0008063e1a",
+    //                 "buttonPayload":"TestBtn",
+    //                 "buttonTitle":"TestBtn"
+    //              }
+    //           ],
+    //           "_id":"5e60eafa91a70a0008063e19",
+    //           "attachment_id":null,
+    //           "itemPayload":"TestPayload",
+    //           "media_url":"https://www.newsfirst.lk/wp-content/uploads/2018/03/Rain_850x460_acf_cropped-2.jpg",
+    //           "itemTitle":"Test2"
+    //        }
+    //     ],
+    //     "__v":0
+    //  }
+
+
+
     console.log("TemplateJSON: " + JSON.stringify(TemplateJSON));
+
+    // TemplateJSON: {"audienceID":"recipientid","message":{},"messaging_type":"RESPONSE","webchatID":"senderid"}
+
+
+    let mediaItemType = CommonJSON.type.toLowerCase();
+    mediaItemType = mediaItem.replace(/\s/g, '');
 
     TemplateJSON.message.attachment = {
         type: "template",
         payload: {
-            template_type: "media",
+            title: CommonJSON.title,
+            type: mediaItemType,
             elements: []
         }
     }
 
-    for (var mediaItem of CommonJSON.items) {
-        TemplateJSON.message.attachment.payload.elements[0] = {
-            media_type: mediaItem.type
-        }
 
-        if (mediaItem.media_url && mediaItem.media_url != "") {
-            TemplateJSON.message.attachment.payload.elements[0].url = mediaItem.media_url;
-        } else if (mediaItem.attachment_id && mediaItem.attachment_id != "") {
-            TemplateJSON.message.attachment.payload.elements[0].attachment_id = mediaItem.attachment_id;
-        }
+    switch (mediaItemType) {
 
-        if (mediaItem.buttons.length > 0) {
-            TemplateJSON.message.attachment.payload.elements[0].buttons = [];
-        }
+        case "calendar":
+            break;
 
-        for (var x = 0; x < mediaItem.buttons.length; x++) {
-            var button = mediaItem.buttons[x];
-            switch (button.type) {
-                case "web_url":
+        case "multipleselection":
+
+            for (var mediaItem of CommonJSON.items) {
+
+                TemplateJSON.message.attachment.payload.elements[0] = {
+                    media_title: mediaItem.itemTitle,
+                    media_url: mediaItem.media_url,
+                    media_payload: mediaItem.itemPayload
+                }
+
+                // if (mediaItem.media_url && mediaItem.media_url != "") {
+                // TemplateJSON.message.attachment.payload.elements[0].url = mediaItem.media_url;
+                // } else if (mediaItem.attachment_id && mediaItem.attachment_id != "") {
+                //     TemplateJSON.message.attachment.payload.elements[0].attachment_id = mediaItem._id;
+                // }
+
+
+                if (mediaItem.buttons.length > 0) {
+                    TemplateJSON.message.attachment.payload.elements[0].buttons = [];
+                }
+
+                for (var x = 0; x < mediaItem.buttons.length; x++) {
+                    var button = mediaItem.buttons[x];
                     TemplateJSON.message.attachment.payload.elements[0].buttons[x] = {
-                        type: button.type,
-                        title: button.title,
-                        url: button.other_data.url
+                        buttonPayload: button.buttonPayload,
+                        buttonTitle: button.buttonTitle
                     }
-                    break;
-                case "postback":
-                    TemplateJSON.message.attachment.payload.elements[0].buttons[x] = {
-                        type: button.type,
-                        title: button.title,
-                        payload: button.payload.message
-                    }
-                    break;
-                default:
-                    console.log("unknown button type.. Fatal error...")
-                    break;
+                    // switch (button.type) {
+                    //     case "web_url":
+                    //         TemplateJSON.message.attachment.payload.elements[0].buttons[x] = {
+                    //             type: button.type,
+                    //             title: button.title,
+                    //             url: button.other_data.url
+                    //         }
+                    //         break;
+                    //     case "postback":
+                    //         TemplateJSON.message.attachment.payload.elements[0].buttons[x] = {
+                    //             type: button.type,
+                    //             title: button.title,
+                    //             payload: button.payload.message
+                    //         }
+                    //         break;
+                    //     default:
+                    //         console.log("unknown button type.. Fatal error...")
+                    //         break;
+                    // }
+                }
+                // break; //returning at first item because webchat is limited to size 1 array for media
             }
-        }
+            break;
 
-        break; //returning at first item because webchat is limited to size 1 array for media
+        default:
+            console.log("Unknown button type")
+            break;
     }
     return TemplateJSON;
 }
