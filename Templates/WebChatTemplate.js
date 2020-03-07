@@ -491,8 +491,9 @@ let GetGeneralJSON = (CommonJSON, TemplateJSON) => {
     // TemplateJSON: {"audienceID":"recipientid","message":{},"messaging_type":"RESPONSE","webchatID":"senderid"}
 
 
-    let mediaItemType = CommonJSON.type.toLowerCase();
-    mediaItemType = mediaItem.replace(/\s/g, '');
+    var mediaItemType = CommonJSON.type.toLowerCase();
+    console.log(mediaItemType);
+    mediaItemType = mediaItemType.replace(/\s/g, '');
 
     TemplateJSON.message.attachment = {
         type: "template",
