@@ -491,33 +491,38 @@ let GetGeneralJSON = (CommonJSON, TemplateJSON) => {
     // TemplateJSON: {"audienceID":"recipientid","message":{},"messaging_type":"RESPONSE","webchatID":"senderid"}
 
 
-    var mediaItemType = CommonJSON.type.toLowerCase();
-    console.log(mediaItemType);
-    mediaItemType = mediaItemType.replace(/\s/g, '');
+    var WcTemplateType = CommonJSON.template_type.toLowerCase();
+    // console.log(WcTemplateType);
+    WcTemplateType = WcTemplateType.replace(/\s/g, '');
 
     TemplateJSON.message.attachment = {
         type: "template",
         payload: {
-            title: CommonJSON.title,
-            type: mediaItemType,
-            elements: []
+            template_type: WcTemplateType,
+            template_ID: CommonJSON.template_ID
         }
     }
 
 
-    switch (mediaItemType) {
+    switch (WcTemplateType) {
+
+        case "appointment":
+            TemplateJSON.message.attachment.payload.title = CommonJSON.title;
+            break;
 
         case "calendar":
             break;
 
         case "multipleselection":
+            TemplateJSON.message.attachment.payload.title = CommonJSON.title;
+            TemplateJSON.message.attachment.payload.elements = [];
 
             for (var mediaItem of CommonJSON.items) {
 
                 TemplateJSON.message.attachment.payload.elements[0] = {
-                    media_title: mediaItem.itemTitle,
-                    media_url: mediaItem.media_url,
-                    media_payload: mediaItem.itemPayload
+                    media_payload: mediaItem.item_payload,
+                    media_title: mediaItem.item_title,
+                    media_url: mediaItem.item_url
                 }
 
                 // if (mediaItem.media_url && mediaItem.media_url != "") {
@@ -556,6 +561,36 @@ let GetGeneralJSON = (CommonJSON, TemplateJSON) => {
                     //         console.log("unknown button type.. Fatal error...")
                     //         break;
                     // }
+                }
+                // break; //returning at first item because webchat is limited to size 1 array for media
+            }
+            break;
+
+        case "multipleselectionstatic":
+            break;
+
+        case "singleselection":
+            TemplateJSON.message.attachment.payload.title = CommonJSON.title;
+            TemplateJSON.message.attachment.payload.elements = [];
+
+            for (var mediaItem of CommonJSON.items) {
+
+                TemplateJSON.message.attachment.payload.elements[0] = {
+                    media_payload: mediaItem.item_payload,
+                    media_title: mediaItem.item_title,
+                    media_url: mediaItem.item_url
+                }
+
+                if (mediaItem.buttons.length > 0) {
+                    TemplateJSON.message.attachment.payload.elements[0].buttons = [];
+                }
+
+                for (var x = 0; x < mediaItem.buttons.length; x++) {
+                    var button = mediaItem.buttons[x];
+                    TemplateJSON.message.attachment.payload.elements[0].buttons[x] = {
+                        buttonPayload: button.buttonPayload,
+                        buttonTitle: button.buttonTitle
+                    }
                 }
                 // break; //returning at first item because webchat is limited to size 1 array for media
             }
