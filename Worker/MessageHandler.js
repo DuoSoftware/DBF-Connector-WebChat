@@ -92,7 +92,9 @@ const HandleMessage = function (req, res) {
     console.log("---------------------------------------------------");
     console.log(JSON.stringify(req.body));
     console.log("---------------------------------------------------");
-
+    // ---------------------------------------------------
+    // {"id":"123","time":1583924614050,"messaging":[{"sender":{},"recipient":{"id":"123"},"timestamp":1583924614050,"message":{"mid":"f3382820-6387-11ea-9d1d-45c254c3d9e6","text":"cancel"}}]}
+    // ---------------------------------------------------
     const company = req.params.company;
     const tenant = req.params.tenant;
 

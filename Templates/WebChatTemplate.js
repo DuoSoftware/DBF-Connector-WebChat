@@ -491,18 +491,26 @@ let GetGeneralJSON = (CommonJSON, TemplateJSON) => {
     // TemplateJSON: {"audienceID":"recipientid","message":{},"messaging_type":"RESPONSE","webchatID":"senderid"}
 
 
-    var WcTemplateType = CommonJSON.template_type.toLowerCase();
+    // var WcTemplateType = CommonJSON.template_type.toLowerCase(); //TODO
+    var WcTemplateType = "singleselection";
     // console.log(WcTemplateType);
     WcTemplateType = WcTemplateType.replace(/\s/g, '');
+
+    // TemplateJSON.message.attachment = {
+    //     type: "template",
+    //     payload: {
+    //         template_type: WcTemplateType,
+    //         template_ID: CommonJSON.template_ID
+    //     }
+    // }
 
     TemplateJSON.message.attachment = {
         type: "template",
         payload: {
             template_type: WcTemplateType,
-            template_ID: CommonJSON.template_ID
+            template_ID: "WcCard1"
         }
     }
-
 
     switch (WcTemplateType) {
 
