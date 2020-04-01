@@ -362,6 +362,7 @@ Send2WebChat = function (data) {
                         console.log("Message: " + message);
                         console.log("Message 2: " + JSON.stringify(message));
                         responseArray.push(message);
+                        break;
                     case "media":
                         message = SendMessenger.SendMedia(newData);
                         console.log("Message: " + message);
