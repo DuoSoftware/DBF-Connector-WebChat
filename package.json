@@ -19,7 +19,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "bluebird": "^3.5.1",
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.20.1",
     "config": "^1.28.1",
     "dbf-dbmodels": "^1.0.212",
     "dbf-speechtotext": "^1.0.5",
