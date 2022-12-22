@@ -23,7 +23,7 @@
     "config": "^1.28.1",
     "dbf-dbmodels": "^1.0.212",
     "dbf-speechtotext": "^1.0.5",
-    "dustjs-linkedin": "^2.7.5",
+    "dustjs-linkedin": "^3.0.0",
     "dvp-common-lite": "^1.0.0",
     "extend": "^3.0.1",
     "request": "^2.83.0",
